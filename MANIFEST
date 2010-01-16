@@ -1,0 +1,8 @@
+* MANIFEST
+* CHANGES
+* INSTALL
+* Rakefile
+* archive-tar-external.gemspec
+* doc/tar_external.txt
+* lib/archive/tar_external.rb
+* test/test_archive_tar_external.rb

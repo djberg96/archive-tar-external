@@ -1,0 +1,29 @@
+== Description
+   A very simple tar/compress package that uses calls to external programs
+   to do the work.
+   
+== Synopsis
+   require "archive/tar_external"
+   include Archive
+   
+   # The long way
+   t = Tar::External.new("test.tar")
+   t.create_archive("*.rb")
+   t.compress_archive("gzip")
+   
+   # The short way
+   t = Tar::External.new("test.tar", "*.rb", "gzip")
+   
+== Prerequisites
+   Ruby 1.8.0 or later.
+   The win32-open3 package (MS Windows only).
+   The "tar" command line program.
+   At least one compression program, e.g. gzip, bzip2, zip, etc.
+   
+== Installation
+   rake test (optional)
+   rake install (non-gem) or rake install_gem (gem)
+   
+== Notes
+   For further documentation and information, see the tar_external.txt file
+   in the 'doc' directory.
