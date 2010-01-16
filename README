@@ -5,7 +5,7 @@
   gem install archive-tar-external
    
 == Synopsis
-  require 'archive/tar_external'
+  require 'archive/tar/external'
   include Archive
    
   # The long way
