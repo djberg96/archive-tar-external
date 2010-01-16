@@ -15,12 +15,33 @@
    
   # The short way
   t = Tar::External.new('test.tar', '*.rb', 'gzip')
-   
+
 == Prerequisites
   The win32-open3 library (MS Windows only).
   The 'tar' command line program.
   At least one compression program, e.g. gzip, bzip2, zip, etc.
    
-== Notes
-  For further documentation and information, see the tar_external.txt file
-  in the 'doc' directory.
+== Known Issues
+  The tar program that comes with Solaris will not raise an error if you
+  try to expand a file from an archive that does not contain that file.
+
+  If you come across any other issues, please report them on the project
+  page at http://www.rubyforge.org/projects/shards.
+
+== Future Plans
+  Anything folks are looking for?
+
+== License
+  Artistic 2.0
+
+== Warranty
+  This package is provided "as is" and without any express or
+  implied warranties, including, without limitation, the implied
+  warranties of merchantability and fitness for a particular purpose.
+
+== Copyright
+  (C) 2003 - 2010 Daniel J. Berger
+  All Rights Reserved
+
+== Author
+  Daniel J. Berger

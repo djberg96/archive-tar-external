@@ -1,27 +1,27 @@
 == Description
-   A simple tar interface using external system calls.
+  A simple tar interface using external system calls.
 
 == Synopsis
-   # Assuming we have three .txt files, t1.txt, t2.txt, t3.txt ...
-   require 'archive/tar_external'
-   include Archive
+  # Assuming we have three .txt files, t1.txt, t2.txt, t3.txt ...
+  require 'archive/tar/external'
+  include Archive
 
-   t = Tar::External.new("myfile.tar")
+  t = Tar::External.new("myfile.tar")
  
-   t.create_archive("*.txt")
-   t.compress_archive("bzip2") # 'myfile.tar.bz2' now exists
+  t.create_archive("*.txt")
+  t.compress_archive("bzip2") # 'myfile.tar.bz2' now exists
 
-   t.uncompress_archive("bunzip2")
+  t.uncompress_archive("bunzip2")
 
-   t.archive_name # "myfile.tar"
-   t.archive_info # ["t1.txt","t2.txt","t3.txt"]
+  t.archive_name # "myfile.tar"
+  t.archive_info # ["t1.txt","t2.txt","t3.txt"]
 
-   t.add_to_archive("t4.txt","t5.txt")
-   t.expand_archive
+  t.add_to_archive("t4.txt","t5.txt")
+  t.expand_archive
 
 == Constants
 VERSION
-   Current version number of this library. This is a string.
+  Current version number of this library. This is a string.
 
 == Class Methods
 Archive::Tar::External.new(archive_name, pattern=nil, program=nil)
@@ -107,30 +107,3 @@ Tar::Error
 Tar::CompressError
    Raised if something goes wrong during the Tar#compress_archive or
    Tar#uncompress_archive methods.
-
-== Known Issues
-   The tar program that comes with Solaris will not raise an error if you
-   try to expand a file from an archive that does not contain that file.
-
-   If you come across any other issues, please report them on the project
-   page at http://www.rubyforge.org/projects/shards.
-
-== Future Plans
-   Anything folks are looking for?
-
-== License
-   Artistic 2.0
-
-== Warranty
-   This package is provided "as is" and without any express or
-   implied warranties, including, without limitation, the implied
-   warranties of merchantability and fitness for a particular purpose.
-
-== Copyright
-   (C) 2003 - 2009 Daniel J. Berger
-   All Rights Reserved
-
-== Author
-   Daniel J. Berger
-   djberg96 at gmail dot com
-   imperator on IRC (freenode)
