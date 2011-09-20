@@ -1,26 +1,26 @@
 require 'rake'
+require 'rake/clean'
 require 'rake/testtask'
 
-desc "Install the archive-tar-external library (non-gem)"
-task :install do
-   dest = File.join(Config::CONFIG['sitelibdir'], 'archive')
-   Dir.mkdir(dest) unless File.exists? dest
-   cp 'lib/archive/tar_external.rb', dest, :verbose => true
-end
+CLEAN.include("**/*.gem", "**/*.rbc")
 
-desc 'Build the archive-tar-external gem'
-task :gem do
-   spec = eval(IO.read('archive-tar-external.gemspec'))
-   Gem::Builder.new(spec).build
-end
+namespace :gem do
+  desc 'Build the archive-tar-external gem'
+  task :create do
+    spec = eval(IO.read('archive-tar-external.gemspec'))
+    Gem::Builder.new(spec).build
+  end
 
-desc 'Install the archive-tar-external library as a gem'
-task :install_gem => [:gem] do
-   file = Dir["*.gem"].first
-   sh "gem install #{file}"
+  desc 'Install the archive-tar-external library as a gem'
+  task :install => [:gem] do
+    file = Dir["*.gem"].first
+    sh "gem install #{file}"
+  end
 end
 
 Rake::TestTask.new do |t|
-   t.warning = true
-   t.verbose = true
+  t.warning = true
+  t.verbose = true
 end
+
+task :default => :test
