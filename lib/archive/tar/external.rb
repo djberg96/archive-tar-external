@@ -1,6 +1,4 @@
-require 'rbconfig'
-
-if Config::CONFIG['host_os'] =~ /mswin|dos|win32|cygwin|mingw/i
+if File::ALT_SEPARATOR
   if RUBY_VERSION.to_f < 1.9 && RUBY_PLATFORM !~ /java/i
     require 'win32/open3'
   else
@@ -27,7 +25,7 @@ module Archive
     # This class encapsulates tar & zip operations.
     class Tar::External
       # The version of the archive-tar-external library.
-      VERSION = '1.3.0'
+      VERSION = '1.3.1'
 
       # The name of the archive file to be used, e.g. "test.tar"
       attr_accessor :archive_name
