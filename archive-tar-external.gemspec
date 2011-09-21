@@ -3,14 +3,13 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name      = 'archive-tar-external'
-  spec.version   = '1.3.0'
+  spec.version   = '1.3.1'
   spec.summary   = 'A simple way to create tar archives using external calls'
   spec.license   = 'Artistic 2.0'
   spec.author    = 'Daniel Berger'
   spec.email     = 'djberg96@gmail.com'
   spec.homepage  = 'http://www.rubyforge.org/shards'
   spec.test_file = 'test/test_archive_tar_external.rb'
-  spec.has_rdoc  = true
   spec.files     = Dir['**/*'].reject{ |f| f.include?('git') }
 
   spec.rubyforge_project = 'shards'
@@ -29,12 +28,12 @@ Gem::Specification.new do |spec|
     or bzip2.
   EOF
 
-  spec.add_development_dependency('test-unit', '>= 2.0.3')
-  spec.add_development_dependency('ptools', '>= 1.1.7')
+  spec.add_development_dependency('test-unit')
+  spec.add_development_dependency('ptools')
 
-  if Config::CONFIG['host_os'] =~ /mswin|dos|win32|cygwin|mingw|win32/i
+  if File::ALT_SEPARATOR
     if RUBY_VERSION.to_f < 1.9 && RUBY_PLATFORM !~ /java/i
-      spec.add_dependency('win32-open3', '>= 0.3.1')
+      spec.add_dependency('win32-open3')
     end
   end
 end
