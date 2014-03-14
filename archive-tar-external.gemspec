@@ -3,16 +3,14 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name      = 'archive-tar-external'
-  spec.version   = '1.3.1'
+  spec.version   = '1.3.2'
   spec.summary   = 'A simple way to create tar archives using external calls'
   spec.license   = 'Artistic 2.0'
   spec.author    = 'Daniel Berger'
   spec.email     = 'djberg96@gmail.com'
-  spec.homepage  = 'http://www.rubyforge.org/shards'
+  spec.homepage  = 'https://github.com/djberg96/archive-tar-external'
   spec.test_file = 'test/test_archive_tar_external.rb'
   spec.files     = Dir['**/*'].reject{ |f| f.include?('git') }
-
-  spec.rubyforge_project = 'shards'
 
   spec.extra_rdoc_files = [
     'README',
@@ -30,10 +28,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency('test-unit')
   spec.add_development_dependency('ptools')
-
-  if File::ALT_SEPARATOR
-    if RUBY_VERSION.to_f < 1.9 && RUBY_PLATFORM !~ /java/i
-      spec.add_dependency('win32-open3')
-    end
-  end
+  spec.add_development_dependency('rake')
 end
