@@ -8,7 +8,12 @@ namespace :gem do
   desc 'Build the archive-tar-external gem'
   task :create do
     spec = eval(IO.read('archive-tar-external.gemspec'))
-    Gem::Builder.new(spec).build
+    if Gem::VERSION < "2.0"
+      Gem::Builder.new(spec).build
+    else
+      require 'rubygems/package'
+      Gem::Package.build(spec)
+    end
   end
 
   desc 'Install the archive-tar-external library as a gem'
