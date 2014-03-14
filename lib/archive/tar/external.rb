@@ -1,12 +1,4 @@
-if File::ALT_SEPARATOR
-  if RUBY_VERSION.to_f < 1.9 && RUBY_PLATFORM !~ /java/i
-    require 'win32/open3'
-  else
-    require 'open3'
-  end
-else
-  require 'open3'
-end
+require 'open3'
 
 # The Archive module serves as a namespace only.
 module Archive
