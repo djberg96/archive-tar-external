@@ -17,7 +17,7 @@
   t = Tar::External.new('test.tar', '*.rb', 'gzip')
 
 == Prerequisites
-  The win32-open3 library (MS Windows only).
+  The win32-open3 library (MS Windows only if using Ruby 1.8.x or earlier).
   The 'tar' command line program.
   At least one compression program, e.g. gzip, bzip2, zip, etc.
    
@@ -26,10 +26,7 @@
   try to expand a file from an archive that does not contain that file.
 
   If you come across any other issues, please report them on the project
-  page at http://www.rubyforge.org/projects/shards.
-
-== Future Plans
-  Anything folks are looking for?
+  page at https://github.com/djberg96/archive-tar-external.
 
 == License
   Artistic 2.0
@@ -40,7 +37,7 @@
   warranties of merchantability and fitness for a particular purpose.
 
 == Copyright
-  (C) 2003 - 2011 Daniel J. Berger
+  (C) 2003 - 2014 Daniel J. Berger
   All Rights Reserved
 
 == Author
