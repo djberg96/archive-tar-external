@@ -19,13 +19,13 @@ module Archive
     class Error < StandardError; end
 
     # Raised if something goes wrong during the Tar#compress_archive or
-    # Tar#uncompress_archive methods.      
+    # Tar#uncompress_archive methods.
     class CompressError < StandardError; end
 
     # This class encapsulates tar & zip operations.
     class Tar::External
       # The version of the archive-tar-external library.
-      VERSION = '1.3.1'
+      VERSION = '1.3.2'
 
       # The name of the archive file to be used, e.g. "test.tar"
       attr_accessor :archive_name
@@ -79,11 +79,13 @@ module Archive
         @compressed_archive_name = name
       end
 
-      # Creates the archive using +file_pattern+.  Any errors that occur
-      # here will raise a Error.
+      # Creates the archive using +file_pattern+ using +options+ or 'cf'
+      # (create file) by default.
       #
-      def create_archive(file_pattern)
-        cmd = "#{@tar_program} cf #{@archive_name} #{file_pattern}"
+      # Raises an Archive::Tar::Error if a failure occurs.
+      #
+      def create_archive(file_pattern, options = 'cf')
+        cmd = "#{@tar_program} #{options} #{@archive_name} #{file_pattern}"
 
         Open3.popen3(cmd){ |tar_in, tar_out, tar_err|
           err = tar_err.gets
@@ -107,7 +109,7 @@ module Archive
         cmd = "#{program} #{@archive_name}"
 
         Open3.popen3(cmd){ |prog_in, prog_out, prog_err|
-          err = prog_err.gets 
+          err = prog_err.gets
           raise CompressError, err.chomp if err
 
           # Find the new file name with the extension.  There's probably a more
@@ -135,7 +137,7 @@ module Archive
         unless @compressed_archive_name
           raise CompressError, "no compressed file found"
         end
-           
+
         cmd = "#{program} #{@compressed_archive_name}"
 
         Open3.popen3(cmd){ |prog_in, prog_out, prog_err|
