@@ -70,8 +70,9 @@ Archive::Tar::External#compress_archive(program="gzip")
    simply be included as part of the program, e.g. "gzip -f".
 
 Archive::Tar::External#create(file_pattern)
-Archive::Tar::External#create_archive(file_pattern)
-   Creates a new tarball, including those files which match 'file_pattern'.
+Archive::Tar::External#create_archive(file_pattern, options = 'cf')
+   Creates a new tarball, including those files which match 'file_pattern'
+   using 'options', which are set to 'cf' (create file) by default.
 
 Archive::Tar::External#expand_archive(files=nil)
 Archive::Tar::External#extract_archive(files=nil)
