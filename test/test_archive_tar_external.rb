@@ -4,11 +4,8 @@
 # Test suite for the archive-tar-external library. This test case should be
 # run via the 'rake test' Rake task.
 ###############################################################################
-require 'rubygems'
-gem 'test-unit'
-
 require 'archive/tar/external'
-require 'test/unit'
+require 'test-unit'
 require 'ptools'
 include Archive
 
@@ -38,7 +35,7 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
   end
 
   def test_version
-    assert_equal('1.3.1', Tar::External::VERSION)
+    assert_equal('1.3.2', Tar::External::VERSION)
   end
 
   def test_constructor
@@ -88,14 +85,22 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
     assert_equal('test.tar', @tar.archive_name)
   end
 
-  def test_create_archive_basic
+  test "create_archive basic functionality" do
     assert_respond_to(@tar, :create_archive)
-
-    assert_raises(ArgumentError){ @tar.create_archive }
-    assert_raises(Tar::Error){ @tar.create_archive('*.blah') }
-
     assert_nothing_raised{ @tar.create_archive(@pattern) }
     assert_true(File.exists?(@tar_name))
+  end
+
+  test "create_archive requires at least on argument" do
+    assert_raises(ArgumentError){ @tar.create_archive }
+  end
+
+  test "create_archive raises an error if no files match the pattern" do
+    assert_raises(Tar::Error){ @tar.create_archive('*.blah') }
+  end
+
+  test "create_archive accepts optional parameters" do
+    assert_nothing_raised{ @tar.create_archive(@pattern, 'cfj') }
   end
 
   def test_create_alias
@@ -167,14 +172,14 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
   end
 
   def test_extract_archive_aliases
-    assert_true(Tar::External.instance_method(:extract_archive) == Tar::External.instance_method(:expand_archive)) 
-    assert_true(Tar::External.instance_method(:extract) == Tar::External.instance_method(:expand_archive)) 
-    assert_true(Tar::External.instance_method(:expand) == Tar::External.instance_method(:expand_archive)) 
+    assert_true(Tar::External.instance_method(:extract_archive) == Tar::External.instance_method(:expand_archive))
+    assert_true(Tar::External.instance_method(:extract) == Tar::External.instance_method(:expand_archive))
+    assert_true(Tar::External.instance_method(:expand) == Tar::External.instance_method(:expand_archive))
   end
 
   def test_extract_archive_advanced
-    omit_unless(Config::CONFIG['host_os'] =~ /sunos|solaris/){
-      assert_nothing_raised{ @tar.tar_program = @@gtar } 
+    omit_unless(RbConfig::CONFIG['host_os'] =~ /sunos|solaris/){
+      assert_nothing_raised{ @tar.tar_program = @@gtar }
     }
     assert_nothing_raised{ @tar.create('*.txt') }
     assert_raises(Tar::Error){ @tar.expand('blah.txt') }
