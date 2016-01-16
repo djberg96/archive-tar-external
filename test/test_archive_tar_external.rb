@@ -88,7 +88,7 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
   test "create_archive basic functionality" do
     assert_respond_to(@tar, :create_archive)
     assert_nothing_raised{ @tar.create_archive(@pattern) }
-    assert_true(File.exists?(@tar_name))
+    assert_true(File.exist?(@tar_name))
   end
 
   test "create_archive requires at least on argument" do
@@ -122,13 +122,13 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
     assert_nothing_raised{ @tar.compress_archive }
 
     assert_equal('test.tar.gz', @tar.compressed_archive_name)
-    assert_true(File.exists?('test.tar.gz'))
+    assert_true(File.exist?('test.tar.gz'))
   end
 
   def test_compress_archive_bzip2
     assert_nothing_raised{ @tar.create_archive('*.txt') }
     assert_nothing_raised{ @tar.compress_archive('bzip2') }
-    assert_true(File.exists?('test.tar.bz2'))
+    assert_true(File.exist?('test.tar.bz2'))
   end
 
   def test_uncompress_archive
@@ -136,7 +136,7 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
     assert_nothing_raised{ @tar.create_archive('*.txt') }
     assert_nothing_raised{ @tar.compress_archive }
     assert_nothing_raised{ @tar.uncompress_archive }
-    assert_false(File.exists?('test.tar.gz'))
+    assert_false(File.exist?('test.tar.gz'))
   end
 
   def test_uncompress_archive_class_method
@@ -190,10 +190,10 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
 
   def teardown
     @tar = nil
-    File.delete('test.tar') if File.exists?('test.tar')
-    File.delete('test.tar.gz') if File.exists?('test.tar.gz')
-    File.delete('test.tar.bz2') if File.exists?('test.tar.bz2')
-    File.delete('test.tar.zip') if File.exists?('test.tar.zip')
+    File.delete('test.tar') if File.exist?('test.tar')
+    File.delete('test.tar.gz') if File.exist?('test.tar.gz')
+    File.delete('test.tar.bz2') if File.exist?('test.tar.bz2')
+    File.delete('test.tar.zip') if File.exist?('test.tar.zip')
   end
 
   def self.shutdown
@@ -201,8 +201,8 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
     @@gzip_found  = nil
     @@bzip2_found = nil
 
-    File.delete(@@tmp_file1) if File.exists?(@@tmp_file1)
-    File.delete(@@tmp_file2) if File.exists?(@@tmp_file2)
-    File.delete(@@tmp_file3) if File.exists?(@@tmp_file3)
+    File.delete(@@tmp_file1) if File.exist?(@@tmp_file1)
+    File.delete(@@tmp_file2) if File.exist?(@@tmp_file2)
+    File.delete(@@tmp_file3) if File.exist?(@@tmp_file3)
   end
 end
