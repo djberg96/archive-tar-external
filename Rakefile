@@ -14,7 +14,7 @@ namespace :gem do
   end
 
   desc 'Install the archive-tar-external library as a gem'
-  task :install => [:gem] do
+  task :install => [:create] do
     file = Dir["*.gem"].first
     sh "gem install -l #{file}"
   end
