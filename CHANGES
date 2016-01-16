@@ -1,3 +1,9 @@
+== 1.3.3 - 16-Jan-2016
+* This gem is now signed.
+* Fixed some deprecation warnings in the test suite.
+* Added an archive-tar-external.rb file for convenience.
+* Updates to the Rakefile.
+
 == 1.3.2 - 14-Mar-2014
 * The create_archive method now accepts an optional second argument that
   specifies options to the tar command. The default is 'cf' (create file).
