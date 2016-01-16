@@ -7,19 +7,16 @@ CLEAN.include("**/*.gem", "**/*.rbc")
 namespace :gem do
   desc 'Build the archive-tar-external gem'
   task :create do
+    require 'rubygems/package'
     spec = eval(IO.read('archive-tar-external.gemspec'))
-    if Gem::VERSION < "2.0"
-      Gem::Builder.new(spec).build
-    else
-      require 'rubygems/package'
-      Gem::Package.build(spec)
-    end
+    spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
+    Gem::Package.build(spec, true)
   end
 
   desc 'Install the archive-tar-external library as a gem'
   task :install => [:gem] do
     file = Dir["*.gem"].first
-    sh "gem install #{file}"
+    sh "gem install -l #{file}"
   end
 end
 
