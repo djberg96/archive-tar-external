@@ -27,6 +27,11 @@
   If you come across any other issues, please report them on the project
   page at https://github.com/djberg96/archive-tar-external.
 
+== History
+  This project was originally named "archive-tarsimple", but was renamed
+  on April 7, 2006. Versions of this gem prior to that date are no longer
+  available.
+
 == License
   Artistic 2.0
 
