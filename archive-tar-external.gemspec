@@ -3,9 +3,9 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name       = 'archive-tar-external'
-  spec.version    = '1.3.3'
+  spec.version    = '1.4.0'
   spec.summary    = 'A simple way to create tar archives using external calls'
-  spec.license    = 'Artistic 2.0'
+  spec.license    = 'Apache-2.0'
   spec.author     = 'Daniel Berger'
   spec.email      = 'djberg96@gmail.com'
   spec.homepage   = 'http://github.com/djberg96/archive-tar-external'
@@ -19,6 +19,15 @@ Gem::Specification.new do |spec|
     'MANIFEST',
     'doc/tar_external.txt'
   ]
+
+  spec.metadata = {
+    'homepage_uri'      => 'https://github.com/djberg96/archive-tar-external',
+    'bug_tracker_uri'   => 'https://github.com/djberg96/archive-tar-external/issues',
+    'changelog_uri'     => 'https://github.com/djberg96/archive-tar-external/blob/master/CHANGES',
+    'documentation_uri' => 'https://github.com/djberg96/archive-tar-external/wiki',
+    'source_code_uri'   => 'https://github.com/djberg96/archive-tar-external',
+    'wiki_uri'          => 'https://github.com/djberg96/archive-tar-external/wiki'
+  }
 
   spec.add_development_dependency('test-unit')
   spec.add_development_dependency('ptools')
