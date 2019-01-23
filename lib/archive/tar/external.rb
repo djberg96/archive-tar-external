@@ -17,7 +17,7 @@ module Archive
     # This class encapsulates tar & zip operations.
     class Tar::External
       # The version of the archive-tar-external library.
-      VERSION = '1.3.3'
+      VERSION = '1.3.4'.freeze
 
       # The name of the archive file to be used, e.g. "test.tar"
       attr_accessor :archive_name
@@ -81,9 +81,7 @@ module Archive
 
         Open3.popen3(cmd){ |tar_in, tar_out, tar_err|
           err = tar_err.gets
-          if err
-            raise Error, err.chomp
-          end
+          raise Error, err.chomp if err
         }
 
         self
@@ -166,9 +164,7 @@ module Archive
         cmd = "#{@tar_program} tf #{@archive_name}"
         Open3.popen3(cmd){ |ain, aout, aerr|
           err = aerr.gets
-          if err
-            raise Error, err.chomp
-          end
+          raise Error, err.chomp if err
 
           while output = aout.gets
             result << output.chomp
