@@ -45,11 +45,11 @@ module Archive
         @tar_program             = 'tar'
 
         if file_pattern
-           create_archive(file_pattern)
+          create_archive(file_pattern)
         end
 
         if program
-           compress_archive(program)
+          compress_archive(program)
         end
       end
 
