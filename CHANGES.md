@@ -1,43 +1,43 @@
-== 1.4.1 - 18-Feb-2021
+## 1.4.1 - 18-Feb-2021
 * Switched from rdoc to markdown.
 
-== 1.4.0 - 23-Jan-2019
+## 1.4.0 - 23-Jan-2019
 * Changed license to Apache-2.0.
 * The VERSION constant is now frozen.
 * Added some metadata to the gemspec.
 * Cert updated, should be good for about 10 years.
 
-== 1.3.3 - 16-Jan-2016
+## 1.3.3 - 16-Jan-2016
 * This gem is now signed.
 * Fixed some deprecation warnings in the test suite.
 * Added an archive-tar-external.rb file for convenience.
 * Updates to the Rakefile.
 
-== 1.3.2 - 14-Mar-2014
+## 1.3.2 - 14-Mar-2014
 * The create_archive method now accepts an optional second argument that
   specifies options to the tar command. The default is 'cf' (create file).
 * The gem:create task was updated for Rubygems 2.x.
 * Added rake as a development dependency.
 * Ruby 1.8.x support has been dropped. This only matters for MS Windows.
 
-== 1.3.1 - 20-Sep-2011
+## 1.3.1 - 20-Sep-2011
 * Refactored the Rakefile a bit.
 
-== 1.3.0 - 16-Jan-2010
+## 1.3.0 - 16-Jan-2010
 * Altered the source code layout, which requires a change in your require
   line. It's now require 'archive/tar/external'.
 * Moved some content from the .txt file to the README.
 * Updated one test to use a skip as needed.
 * Moved source code to github.
 
-== 1.2.3 - 25-Sep-2009
+## 1.2.3 - 25-Sep-2009
 * Fixed a packaging bug.
 * Added cygwin and mingw to Windows checks.
 * Now requires open3 properly for Ruby 1.9 on Windows.
 * Minor modifications to the gemspec.
 * Added the 'gem' rake task.
 
-== 1.2.2 - 28-Jul-2009
+## 1.2.2 - 28-Jul-2009
 * Compatibility fixes for Ruby 1.9.x and JRuby.
 * Singleton methods that were previously synonyms are now true aliases.
 * License changed to Artistic 2.0.
@@ -48,13 +48,13 @@
   in test-unit 2.x.
 * Renamed the test file to test_archive_tar_external.rb.
 
-== 1.2.1 - 30-Jul-2007
+## 1.2.1 - 30-Jul-2007
 * The TarError class is now Tar::Error.
 * Added a Rakefile with tasks for installation and testing.
 * Removed the install.rb file. Installation is now handled by the Rakefile.
 * Documentation updates.
 
-== 1.2.0 - 7-Apr-2006
+## 1.2.0 - 7-Apr-2006
 * Project renamed 'archive-tar-external'.
 * The 'Tar' class is now Tar::External.
 * The RAA project name is now tar-external.
@@ -64,16 +64,16 @@
   that already exist.
 * Added the Tar::External#compressed_archive_name= method.
 
-== 1.1.1 - 1-Mar-2006
+## 1.1.1 - 1-Mar-2006
 * Replaced PLATFORM with RUBY_PLATFORM since the former is deprecated
   for Ruby 1.9/2.0.
 
-== 1.1.0 - 10-Feb-2006
+## 1.1.0 - 10-Feb-2006
 * Internal refactoring changes - now uses block form of Open3.popen3.
 * Most methods now return self instead of true (better for chaining).
 * Corresponding test suite changes.
 
-== 1.0.0 - 1-Sep-2005
+## 1.0.0 - 1-Sep-2005
 * Moved project to RubyForge.
 * Modified the constructor to accept a file pattern.  If present, becomes
   a shortcut for Tar.new + Tar#create_archive.
@@ -94,7 +94,7 @@
 * Test suite updates.
 * Added a gemspec.
 
-== 0.3.0 - 10-Aug-2004
+## 0.3.0 - 10-Aug-2004
 * Added the update_archive() method.
 * The expand_archive() method has been renamed to extract_archive().
   For backward's compatability, an alias remains so you may use
@@ -104,7 +104,7 @@
   If not, then the entire archive is extracted.
 * Added corresponding tests and documentation updates.
 
-== 0.2.0 - 9-Aug-2004
+## 0.2.0 - 9-Aug-2004
 * Added the add_to_archive() method.
 * Removed the VERSION() class method. Use the constant instead.
 * Changed "TarException" and "CompressionException" to "TarError" and
@@ -115,5 +115,5 @@
   wish using the rd2 tool.
 * Added warranty information.
 
-== 0.1.0 - 24-Jan-2003
+## 0.1.0 - 24-Jan-2003
 * Initial Release
