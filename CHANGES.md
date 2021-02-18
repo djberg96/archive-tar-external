@@ -1,3 +1,6 @@
+== 1.4.1 - 18-Feb-2021
+* Switched from rdoc to markdown.
+
 == 1.4.0 - 23-Jan-2019
 * Changed license to Apache-2.0.
 * The VERSION constant is now frozen.

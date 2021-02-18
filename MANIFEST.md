@@ -1,6 +1,6 @@
-* MANIFEST
-* CHANGES
-* INSTALL
+* MANIFEST.md
+* CHANGES.md
+* README.md
 * Rakefile
 * archive-tar-external.gemspec
 * certs/djberg96_pub.pem
