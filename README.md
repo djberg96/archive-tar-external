@@ -6,7 +6,7 @@ A simple tar & compress library that nicely wraps external system calls.
    
 ## Synopsis
 ```ruby
-require 'archive/tar/external'
+require 'archive/tar/external' # or 'archive-tar-external'
    
 # Create an archive of all files with an ".rb" extension, the long way.
 t = Archive::Tar::External.new('test.tar')
