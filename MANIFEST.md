@@ -1,10 +1,10 @@
-* MANIFEST
-* CHANGES
-* INSTALL
+* CHANGES.md
+* MANIFEST.md
+* README.md
 * Rakefile
 * archive-tar-external.gemspec
 * certs/djberg96_pub.pem
-* doc/tar_external.txt
+* doc/tar_external.md
 * lib/archive-tar-external.rb
 * lib/archive/tar_external.rb
 * test/test_archive_tar_external.rb

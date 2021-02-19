@@ -3,7 +3,7 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name       = 'archive-tar-external'
-  spec.version    = '1.4.0'
+  spec.version    = '1.4.1'
   spec.summary    = 'A simple way to create tar archives using external calls'
   spec.license    = 'Apache-2.0'
   spec.author     = 'Daniel Berger'
@@ -12,13 +12,6 @@ Gem::Specification.new do |spec|
   spec.test_file  = 'test/test_archive_tar_external.rb'
   spec.files      = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain = Dir['certs/*']
-
-  spec.extra_rdoc_files = [
-    'README',
-    'CHANGES',
-    'MANIFEST',
-    'doc/tar_external.txt'
-  ]
 
   spec.metadata = {
     'homepage_uri'      => 'https://github.com/djberg96/archive-tar-external',
