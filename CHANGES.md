@@ -1,4 +1,4 @@
-## 1.4.1 - 18-Feb-2021
+## 1.4.1 - 19-Feb-2021
 * Switched from rdoc to markdown.
 
 ## 1.4.0 - 23-Jan-2019

@@ -17,7 +17,7 @@ module Archive
     # This class encapsulates tar & zip operations.
     class Tar::External
       # The version of the archive-tar-external library.
-      VERSION = '1.4.0'.freeze
+      VERSION = '1.4.1'.freeze
 
       # The name of the archive file to be used, e.g. "test.tar"
       attr_accessor :archive_name
