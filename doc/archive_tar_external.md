@@ -63,7 +63,7 @@ provided or an `Archive::Tar::Error` is raised.
 
 Returns an array of file names that are included within the tarball.
 
-`a#rchive_name`
+`#archive_name`
 
 Returns the current archive name.
 
