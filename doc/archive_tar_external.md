@@ -48,14 +48,18 @@ Identical to the instance method of the same name, except that you must
 specify the +archive_name+ as the first argument.
 
 ## Instance Methods
-`add(file1 [, file2, ...])`
-`add_to_archive(file1 [, file2, ...])`
+```
+add(file1 [, file2, ...])
+add_to_archive(file1 [, file2, ...])
+```
 
 Adds a list of files to the current archive. At least one file must be
 provided or an `Archive::Tar::Error` is raised.
 
-`archive_info`
-`info`
+```
+archive_info
+info
+```
 
 Returns an array of file names that are included within the tarball.
 
@@ -67,22 +71,28 @@ Returns the current archive name.
 
 Sets the current archive name.
 
-`compress(program="gzip")`
-`compress_archive(program="gzip")`
+```
+compress(program="gzip")
+compress_archive(program="gzip")
+```
 
 Compresses the tarball using the program you pass to this method. The default is "gzip".
 
 Note that any arguments you want to be passed along with the program can simply
 be included as part of the program, e.g. "gzip -f".
 
-`create(file_pattern)`
-`create_archive(file_pattern, options = 'cf')`
+```
+create(file_pattern)
+create_archive(file_pattern, options = 'cf')
+```
 
 Creates a new tarball, including those files which match `file_pattern`
 using `options`, which are set to 'cf' (create file) by default.
 
-`expand_archive(files=nil)`
-`extract_archive(files=nil)`
+```
+expand_archive(files=nil)
+extract_archive(files=nil)
+```
 
 Expands the contents of the tarball. Note that this method does NOT delete the tarball.
 
@@ -96,15 +106,19 @@ Returns the name of the tar program used. The default is "tar".
 
 Sets the name of the tar program to be used.
 
-`uncompress(program="gunzip")`
-`uncompress_archive(program="gunzip")`
+```
+uncompress(program="gunzip")
+uncompress_archive(program="gunzip")
+```
 
 Uncompresses the tarball using the program you pass to this method. The default is "gunzip".
 
 Like the `compress_archive` method, you can pass arguments along as part of the method call.
 
-`#update(files)`
-`#update_archive(files)`
+```
+#update(files)
+#update_archive(files)
+```
 
 Updates the given `files` in the archive, i.e they are added if they
 are not already in the archive or have been modified.
