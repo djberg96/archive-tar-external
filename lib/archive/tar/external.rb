@@ -17,7 +17,7 @@ module Archive
     # This class encapsulates tar & zip operations.
     class Tar::External
       # The version of the archive-tar-external library.
-      VERSION = '1.4.1'.freeze
+      VERSION = '1.5.0'.freeze
 
       # The name of the archive file to be used, e.g. "test.tar"
       attr_accessor :archive_name
@@ -39,7 +39,7 @@ module Archive
       # If +program+ is provided, then it compresses the archive as well by
       # calling Archive::Tar::External#compress_archive internally.
       #
-      def initialize(archive_name, file_pattern=nil, program=nil)
+      def initialize(archive_name:, file_pattern: nil, program: nil)
         @archive_name            = archive_name.to_s
         @compressed_archive_name = nil
         @tar_program             = 'tar'
