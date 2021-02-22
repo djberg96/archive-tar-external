@@ -9,12 +9,16 @@ A simple tar & compress library that nicely wraps external system calls.
 require 'archive/tar/external' # or 'archive-tar-external'
    
 # Create an archive of all files with an ".rb" extension, the long way.
-t = Archive::Tar::External.new('test.tar')
-t.create_archive('*.rb')
-t.compress_archive('gzip')
+t = Archive::Tar::External.new(archive_name: 'test.tar')
+t.create_archive("*.rb")
+t.compress_archive("gzip")
    
 # Same, but the short way.
-t = Archive::Tar::External.new('test.tar', '*.rb', 'gzip')
+Archive::Tar::External.new(
+  :archive_name => "test.tar",
+  :file_pattern => "*.rb",
+  :program      => "gzip"
+)
 ```
 
 ## Prerequisites

@@ -7,7 +7,7 @@ A simple tar interface using external system calls.
 require 'archive/tar/external'
 include Archive
 
-t = Tar::External.new("myfile.tar")
+t = Tar::External.new(archive_name: "myfile.tar")
  
 t.create_archive("*.txt")
 t.compress_archive("bzip2") # 'myfile.tar.bz2' now exists
@@ -15,9 +15,9 @@ t.compress_archive("bzip2") # 'myfile.tar.bz2' now exists
 t.uncompress_archive("bunzip2")
 
 t.archive_name # "myfile.tar"
-t.archive_info # ["t1.txt","t2.txt","t3.txt"]
+t.archive_info # ["t1.txt", "t2.txt", "t3.txt"]
 
-t.add_to_archive("t4.txt","t5.txt")
+t.add_to_archive("t4.txt", "t5.txt")
 t.expand_archive
 ```
 
