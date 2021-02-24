@@ -91,7 +91,7 @@ module Archive
       # Any errors that occur here will raise an Archive::Tar::CompressError.
       #
       def compress_archive(zip_program='gzip')
-        cmd = "#{program} #{@archive_name}"
+        cmd = "#{zip_program} #{@archive_name}"
 
         Open3.popen3(cmd){ |prog_in, prog_out, prog_err|
           err = prog_err.gets
@@ -138,8 +138,8 @@ module Archive
       # Uncompress an existing archive, using +program+ to uncompress it.
       # The default decompression program is gunzip.
       #
-      def self.uncompress_archive(archive, program='gunzip')
-        cmd = "#{program} #{archive}"
+      def self.uncompress_archive(archive, zip_program='gunzip')
+        cmd = "#{zip_program} #{archive}"
 
         Open3.popen3(cmd){ |prog_in, prog_out, prog_err|
           err = prog_err.gets

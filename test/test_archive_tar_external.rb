@@ -50,12 +50,12 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
 
   def test_constructor_with_program
     omit_unless(@@gzip_found){ 'gzip program not found - skipping' }
-    assert_nothing_raised{ Archive::Tar::External.new(archive_name: @tar_name, file_pattern: '*.txt', program: 'gzip') }
+    assert_nothing_raised{ Archive::Tar::External.new(archive_name: @tar_name, file_pattern: '*.txt', zip_program: 'gzip') }
   end
 
   def test_constructor_expected_errors
     assert_raise(ArgumentError){ Archive::Tar::External.new }
-    assert_raise(ArgumentError){ Archive::Tar::External.new(program: 'gzip') }
+    assert_raise(ArgumentError){ Archive::Tar::External.new(zip_program: 'gzip') }
   end
 
   def test_tar_program
