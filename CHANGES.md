@@ -1,3 +1,6 @@
+## 1.5.0 - 22-Feb-2021
+* Switch from positional to named parameters.
+
 ## 1.4.1 - 19-Feb-2021
 * Switched from rdoc to markdown.
 

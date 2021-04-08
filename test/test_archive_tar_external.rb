@@ -7,7 +7,6 @@
 require 'archive/tar/external'
 require 'test-unit'
 require 'ptools'
-include Archive
 
 class TC_ArchiveTarExternal < Test::Unit::TestCase
   def self.startup
@@ -28,32 +27,35 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
   end
 
   def setup
-    @tar      = Tar::External.new('test.tar')
+    @tar      = Archive::Tar::External.new(archive_name: 'test.tar')
     @tar_name = 'test.tar'
     @pattern  = '*.txt'
     @archive  = 'temp.tar.gz'
   end
 
   def test_version
-    assert_equal('1.4.1', Tar::External::VERSION)
-    assert_true(Tar::External::VERSION.frozen?)
+    assert_equal('1.5.0', Archive::Tar::External::VERSION)
+    assert_true(Archive::Tar::External::VERSION.frozen?)
   end
 
   def test_constructor
-    assert_nothing_raised{ Tar::External.new(@tar_name) }
+    assert_nothing_raised{ Archive::Tar::External.new(archive_name: @tar_name) }
+    assert_nothing_raised{ Archive::Tar::External.new(:archive_name => @tar_name) }
   end
 
   def test_constructor_with_extension
-    assert_nothing_raised{ Tar::External.new(@tar_name, '*.txt') }
+    assert_nothing_raised{ Archive::Tar::External.new(archive_name: @tar_name, file_pattern: '*.txt') }
+    assert_nothing_raised{ Archive::Tar::External.new(:archive_name => @tar_name, :file_pattern => '*.txt') }
   end
 
   def test_constructor_with_program
     omit_unless(@@gzip_found){ 'gzip program not found - skipping' }
-    assert_nothing_raised{ Tar::External.new(@tar_name, '*.txt', 'gzip') }
+    assert_nothing_raised{ Archive::Tar::External.new(archive_name: @tar_name, file_pattern: '*.txt', zip_program: 'gzip') }
   end
 
   def test_constructor_expected_errors
-    assert_raise(ArgumentError){ Tar::External.new }
+    assert_raise(ArgumentError){ Archive::Tar::External.new }
+    assert_raise(ArgumentError){ Archive::Tar::External.new(zip_program: 'gzip') }
   end
 
   def test_tar_program
@@ -97,7 +99,7 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
   end
 
   test "create_archive raises an error if no files match the pattern" do
-    assert_raises(Tar::Error){ @tar.create_archive('*.blah') }
+    assert_raises(Archive::Tar::Error){ @tar.create_archive('*.blah') }
   end
 
   test "create_archive accepts optional parameters" do
@@ -106,7 +108,7 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
 
   def test_create_alias
     assert_respond_to(@tar, :create)
-    assert_true(Tar::External.instance_method(:create) == Tar::External.instance_method(:create_archive))
+    assert_true(Archive::Tar::External.instance_method(:create) == Archive::Tar::External.instance_method(:create_archive))
   end
 
   def test_compress_archive_basic
@@ -115,7 +117,7 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
 
   def test_compress_alias
     assert_respond_to(@tar, :compress)
-    assert_true(Tar::External.instance_method(:compress) == Tar::External.instance_method(:compress_archive))
+    assert_true(Archive::Tar::External.instance_method(:compress) == Archive::Tar::External.instance_method(:compress_archive))
   end
 
   def test_compress_archive_gzip
@@ -141,12 +143,12 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
   end
 
   def test_uncompress_archive_class_method
-    assert_respond_to(Tar::External, :uncompress_archive)
+    assert_respond_to(Archive::Tar::External, :uncompress_archive)
   end
 
   def test_uncompress_alias
-    assert_respond_to(Tar::External, :uncompress)
-    assert_true(Tar::External.method(:uncompress) == Tar::External.method(:uncompress_archive))
+    assert_respond_to(Archive::Tar::External, :uncompress)
+    assert_true(Archive::Tar::External.method(:uncompress) == Archive::Tar::External.method(:uncompress_archive))
   end
 
   def test_archive_info
@@ -173,9 +175,9 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
   end
 
   def test_extract_archive_aliases
-    assert_true(Tar::External.instance_method(:extract_archive) == Tar::External.instance_method(:expand_archive))
-    assert_true(Tar::External.instance_method(:extract) == Tar::External.instance_method(:expand_archive))
-    assert_true(Tar::External.instance_method(:expand) == Tar::External.instance_method(:expand_archive))
+    assert_true(Archive::Tar::External.instance_method(:extract_archive) == Archive::Tar::External.instance_method(:expand_archive))
+    assert_true(Archive::Tar::External.instance_method(:extract) == Archive::Tar::External.instance_method(:expand_archive))
+    assert_true(Archive::Tar::External.instance_method(:expand) == Archive::Tar::External.instance_method(:expand_archive))
   end
 
   def test_extract_archive_advanced
@@ -183,7 +185,7 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
       assert_nothing_raised{ @tar.tar_program = @@gtar }
     }
     assert_nothing_raised{ @tar.create('*.txt') }
-    assert_raises(Tar::Error){ @tar.expand('blah.txt') }
+    assert_raises(Archive::Tar::Error){ @tar.expand('blah.txt') }
 
     assert_nothing_raised{ @tar.extract_archive }
     assert_nothing_raised{ @tar.extract_archive('temp2.txt') }

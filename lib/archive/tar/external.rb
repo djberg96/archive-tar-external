@@ -17,7 +17,7 @@ module Archive
     # This class encapsulates tar & zip operations.
     class Tar::External
       # The version of the archive-tar-external library.
-      VERSION = '1.4.1'.freeze
+      VERSION = '1.5.0'.freeze
 
       # The name of the archive file to be used, e.g. "test.tar"
       attr_accessor :archive_name
@@ -28,29 +28,24 @@ module Archive
       # The name of the archive file after compression, e.g. "test.tar.gz"
       attr_reader :compressed_archive_name
 
-      # Returns an Archive::Tar::External object.  The +archive_name+ is the
-      # name of the tarball.  While a .tar extension is recommended based on
+      # Returns an Archive::Tar::External object. The +archive_name+ is the
+      # name of the tarball. While a .tar extension is recommended based on
       # years of convention, it is not enforced.
       #
       # Note that this does not actually create the archive unless you
-      # pass a value to +file_pattern+.  This then becomes a shortcut for
+      # pass a value to +file_pattern+. This then becomes a shortcut for
       # Archive::Tar::External.new + Archive::Tar::External#create_archive.
       #
-      # If +program+ is provided, then it compresses the archive as well by
+      # If +zip_program+ is provided, then it compresses the archive as well by
       # calling Archive::Tar::External#compress_archive internally.
       #
-      def initialize(archive_name, file_pattern=nil, program=nil)
+      def initialize(archive_name:, file_pattern: nil, zip_program: nil)
         @archive_name            = archive_name.to_s
         @compressed_archive_name = nil
         @tar_program             = 'tar'
 
-        if file_pattern
-          create_archive(file_pattern)
-        end
-
-        if program
-          compress_archive(program)
-        end
+        create_archive(file_pattern) if file_pattern
+        compress_archive(zip_program) if zip_program
       end
 
       # Assign a compressed archive name.  This autogenerates the archive_name
@@ -89,20 +84,20 @@ module Archive
 
       alias :create :create_archive
 
-      # Compresses the archive with +program+, or gzip if no program is
-      # provided.  If you want to pass arguments to +program+, merely include
+      # Compresses the archive with +zip_program+, or gzip if no program is
+      # provided. If you want to pass arguments to +zip_program+, then include
       # them as part of the program name, e.g. "gzip -f".
       #
-      # Any errors that occur here will raise a Tar::CompressError.
+      # Any errors that occur here will raise an Archive::Tar::CompressError.
       #
-      def compress_archive(program='gzip')
-        cmd = "#{program} #{@archive_name}"
+      def compress_archive(zip_program='gzip')
+        cmd = "#{zip_program} #{@archive_name}"
 
         Open3.popen3(cmd){ |prog_in, prog_out, prog_err|
           err = prog_err.gets
           raise CompressError, err.chomp if err
 
-          # Find the new file name with the extension.  There's probably a more
+          # Find the new file name with the extension. There's probably a more
           # reliable way to do this, but this should work 99% of the time.
           name = Dir["#{@archive_name}.{gz,bz2,cpio,zip}"].first
           @compressed_archive_name = name
@@ -143,8 +138,8 @@ module Archive
       # Uncompress an existing archive, using +program+ to uncompress it.
       # The default decompression program is gunzip.
       #
-      def self.uncompress_archive(archive, program='gunzip')
-        cmd = "#{program} #{archive}"
+      def self.uncompress_archive(archive, zip_program='gunzip')
+        cmd = "#{zip_program} #{archive}"
 
         Open3.popen3(cmd){ |prog_in, prog_out, prog_err|
           err = prog_err.gets
