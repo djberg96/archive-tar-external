@@ -41,7 +41,7 @@ module Archive
       # If +program+ is provided, then it compresses the archive as well by
       # calling Archive::Tar::External#compress_archive internally.
       #
-      def initialize(archive_name, file_pattern=nil, program=nil)
+      def initialize(archive_name, file_pattern = nil, program = nil)
         @archive_name            = archive_name.to_s
         @compressed_archive_name = nil
         @tar_program             = 'tar'
@@ -64,7 +64,7 @@ module Archive
       # that you want to uncompress, and want to have a Tar::External object
       # around.  Otherwise, use the class method Tar::External.uncompress.
       #
-      def compressed_archive_name=(name, ext=File.extname(name))
+      def compressed_archive_name=(name, ext = File.extname(name))
         if ext.downcase == '.tgz'
           @archive_name = File.basename(name, ext.downcase) + '.tar'
         else
@@ -97,7 +97,7 @@ module Archive
       #
       # Any errors that occur here will raise a Tar::CompressError.
       #
-      def compress_archive(program='gzip')
+      def compress_archive(program = 'gzip')
         cmd = "#{program} #{@archive_name}"
 
         Open3.popen3(cmd) do |_prog_in, _prog_out, prog_err|
@@ -125,7 +125,7 @@ module Archive
       #
       # Any errors that occur here will raise a Tar::CompressError.
       #
-      def uncompress_archive(program="gunzip")
+      def uncompress_archive(program = "gunzip")
         unless @compressed_archive_name
           raise CompressError, "no compressed file found"
         end
@@ -145,7 +145,7 @@ module Archive
       # Uncompress an existing archive, using +program+ to uncompress it.
       # The default decompression program is gunzip.
       #
-      def self.uncompress_archive(archive, program='gunzip')
+      def self.uncompress_archive(archive, program = 'gunzip')
         cmd = "#{program} #{archive}"
 
         Open3.popen3(cmd) do |_prog_in, _prog_out, prog_err|
