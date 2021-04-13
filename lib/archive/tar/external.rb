@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'open3'
 
 # The Archive module serves as a namespace only.
