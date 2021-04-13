@@ -87,7 +87,7 @@ module Archive
         self
       end
 
-      alias :create :create_archive
+      alias create create_archive
 
       # Compresses the archive with +program+, or gzip if no program is
       # provided.  If you want to pass arguments to +program+, merely include
@@ -111,7 +111,7 @@ module Archive
         self
       end
 
-      alias :compress :compress_archive
+      alias compress compress_archive
 
       # Uncompresses the tarball using the program you pass to this method.  The
       # default is "gunzip".  Just as for +compress_archive+, you can pass
@@ -138,7 +138,7 @@ module Archive
         self
       end
 
-      alias :uncompress :uncompress_archive
+      alias uncompress uncompress_archive
 
       # Uncompress an existing archive, using +program+ to uncompress it.
       # The default decompression program is gunzip.
@@ -173,7 +173,7 @@ module Archive
         result
       end
 
-      alias :info :archive_info
+      alias info archive_info
 
       # Adds +files+ to an already existing archive.
       #
@@ -191,7 +191,7 @@ module Archive
         self
       end
 
-      alias :add :add_to_archive
+      alias add add_to_archive
 
       # Updates the given +files+ in the archive, i.e. they are added if they
       # are not already in the archive or have been modified.
@@ -211,7 +211,7 @@ module Archive
         self
       end
 
-      alias :update :update_archive
+      alias update update_archive
 
       # Expands the contents of the tarball.  It does NOT delete the tarball.
       # If +files+ are provided, then only those files are extracted.
@@ -236,9 +236,9 @@ module Archive
         self
       end
 
-      alias :expand_archive :extract_archive
-      alias :extract :extract_archive
-      alias :expand :extract_archive
+      alias expand_archive extract_archive
+      alias extract extract_archive
+      alias expand extract_archive
 
       # A class method that behaves identically to the equivalent instance
       # method, except that you must specifiy that tarball as the first
