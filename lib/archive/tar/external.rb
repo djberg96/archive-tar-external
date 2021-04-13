@@ -79,10 +79,10 @@ module Archive
       def create_archive(file_pattern, options = 'cf')
         cmd = "#{@tar_program} #{options} #{@archive_name} #{file_pattern}"
 
-        Open3.popen3(cmd){ |_tar_in, _tar_out, tar_err|
+        Open3.popen3(cmd) do |_tar_in, _tar_out, tar_err|
           err = tar_err.gets
           raise Error, err.chomp if err
-        }
+        end
 
         self
       end
@@ -98,7 +98,7 @@ module Archive
       def compress_archive(program='gzip')
         cmd = "#{program} #{@archive_name}"
 
-        Open3.popen3(cmd){ |_prog_in, _prog_out, prog_err|
+        Open3.popen3(cmd) do |_prog_in, _prog_out, prog_err|
           err = prog_err.gets
           raise CompressError, err.chomp if err
 
@@ -106,7 +106,7 @@ module Archive
           # reliable way to do this, but this should work 99% of the time.
           name = Dir["#{@archive_name}.{gz,bz2,cpio,zip}"].first
           @compressed_archive_name = name
-        }
+        end
 
         self
       end
@@ -130,11 +130,11 @@ module Archive
 
         cmd = "#{program} #{@compressed_archive_name}"
 
-        Open3.popen3(cmd){ |_prog_in, _prog_out, prog_err|
+        Open3.popen3(cmd) do |_prog_in, _prog_out, prog_err|
           err = prog_err.gets
           raise CompressError, err.chomp if err
           @compressed_archive_name = nil
-        }
+        end
         self
       end
 
@@ -146,10 +146,10 @@ module Archive
       def self.uncompress_archive(archive, program='gunzip')
         cmd = "#{program} #{archive}"
 
-        Open3.popen3(cmd){ |_prog_in, _prog_out, prog_err|
+        Open3.popen3(cmd) do |_prog_in, _prog_out, prog_err|
           err = prog_err.gets
           raise CompressError, err.chomp if err
-        }
+        end
       end
 
       class << self
@@ -162,14 +162,14 @@ module Archive
       def archive_info
         result = []
         cmd = "#{@tar_program} tf #{@archive_name}"
-        Open3.popen3(cmd){ |_ain, aout, aerr|
+        Open3.popen3(cmd) do |_ain, aout, aerr|
           err = aerr.gets
           raise Error, err.chomp if err
 
           while output = aout.gets
             result << output.chomp
           end
-        }
+        end
         result
       end
 
@@ -184,10 +184,10 @@ module Archive
 
         cmd = "#{@tar_program} rf #{@archive_name} #{files.join(" ")}"
 
-        Open3.popen3(cmd){ |_ain, _aout, aerr|
+        Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
           raise Error, err.chomp if err
-        }
+        end
         self
       end
 
@@ -203,10 +203,10 @@ module Archive
 
         cmd = "#{@tar_program} uf #{@archive_name} #{files.join(" ")}"
 
-        Open3.popen3(cmd){ |_ain, _aout, aerr|
+        Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
           raise Error, err.chomp if err
-        }
+        end
 
         self
       end
@@ -228,10 +228,10 @@ module Archive
           cmd << " " << files.join(" ")
         end
 
-        Open3.popen3(cmd){ |_ain, _aout, aerr|
+        Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
           raise Error, err.chomp if err
-        }
+        end
 
         self
       end
@@ -251,10 +251,10 @@ module Archive
           cmd << " " << files.join(" ")
         end
 
-        Open3.popen3(cmd){ |_ain, _aout, aerr|
+        Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
           raise Error, err.chomp if err
-        }
+        end
 
         self
       end
