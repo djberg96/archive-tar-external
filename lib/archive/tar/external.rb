@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'open3'
 
 # The Archive module serves as a namespace only.
@@ -17,7 +19,7 @@ module Archive
     # This class encapsulates tar & zip operations.
     class Tar::External
       # The version of the archive-tar-external library.
-      VERSION = '1.4.1'.freeze
+      VERSION = '1.4.2'
 
       # The name of the archive file to be used, e.g. "test.tar"
       attr_accessor :archive_name
@@ -39,18 +41,13 @@ module Archive
       # If +program+ is provided, then it compresses the archive as well by
       # calling Archive::Tar::External#compress_archive internally.
       #
-      def initialize(archive_name, file_pattern=nil, program=nil)
+      def initialize(archive_name, file_pattern = nil, program = nil)
         @archive_name            = archive_name.to_s
         @compressed_archive_name = nil
         @tar_program             = 'tar'
 
-        if file_pattern
-          create_archive(file_pattern)
-        end
-
-        if program
-          compress_archive(program)
-        end
+        create_archive(file_pattern) if file_pattern
+        compress_archive(program) if program
       end
 
       # Assign a compressed archive name.  This autogenerates the archive_name
@@ -62,7 +59,7 @@ module Archive
       # that you want to uncompress, and want to have a Tar::External object
       # around.  Otherwise, use the class method Tar::External.uncompress.
       #
-      def compressed_archive_name=(name, ext=File.extname(name))
+      def compressed_archive_name=(name, ext = File.extname(name))
         if ext.downcase == '.tgz'
           @archive_name = File.basename(name, ext.downcase) + '.tar'
         else
@@ -79,15 +76,15 @@ module Archive
       def create_archive(file_pattern, options = 'cf')
         cmd = "#{@tar_program} #{options} #{@archive_name} #{file_pattern}"
 
-        Open3.popen3(cmd){ |tar_in, tar_out, tar_err|
+        Open3.popen3(cmd) do |_tar_in, _tar_out, tar_err|
           err = tar_err.gets
           raise Error, err.chomp if err
-        }
+        end
 
         self
       end
 
-      alias :create :create_archive
+      alias create create_archive
 
       # Compresses the archive with +program+, or gzip if no program is
       # provided.  If you want to pass arguments to +program+, merely include
@@ -95,10 +92,10 @@ module Archive
       #
       # Any errors that occur here will raise a Tar::CompressError.
       #
-      def compress_archive(program='gzip')
+      def compress_archive(program = 'gzip')
         cmd = "#{program} #{@archive_name}"
 
-        Open3.popen3(cmd){ |prog_in, prog_out, prog_err|
+        Open3.popen3(cmd) do |_prog_in, _prog_out, prog_err|
           err = prog_err.gets
           raise CompressError, err.chomp if err
 
@@ -106,12 +103,12 @@ module Archive
           # reliable way to do this, but this should work 99% of the time.
           name = Dir["#{@archive_name}.{gz,bz2,cpio,zip}"].first
           @compressed_archive_name = name
-        }
+        end
 
         self
       end
 
-      alias :compress :compress_archive
+      alias compress compress_archive
 
       # Uncompresses the tarball using the program you pass to this method.  The
       # default is "gunzip".  Just as for +compress_archive+, you can pass
@@ -123,33 +120,31 @@ module Archive
       #
       # Any errors that occur here will raise a Tar::CompressError.
       #
-      def uncompress_archive(program="gunzip")
-        unless @compressed_archive_name
-          raise CompressError, "no compressed file found"
-        end
+      def uncompress_archive(program = 'gunzip')
+        raise CompressError, 'no compressed file found' unless @compressed_archive_name
 
         cmd = "#{program} #{@compressed_archive_name}"
 
-        Open3.popen3(cmd){ |prog_in, prog_out, prog_err|
+        Open3.popen3(cmd) do |_prog_in, _prog_out, prog_err|
           err = prog_err.gets
           raise CompressError, err.chomp if err
           @compressed_archive_name = nil
-        }
+        end
         self
       end
 
-      alias :uncompress :uncompress_archive
+      alias uncompress uncompress_archive
 
       # Uncompress an existing archive, using +program+ to uncompress it.
       # The default decompression program is gunzip.
       #
-      def self.uncompress_archive(archive, program='gunzip')
+      def self.uncompress_archive(archive, program = 'gunzip')
         cmd = "#{program} #{archive}"
 
-        Open3.popen3(cmd){ |prog_in, prog_out, prog_err|
+        Open3.popen3(cmd) do |_prog_in, _prog_out, prog_err|
           err = prog_err.gets
           raise CompressError, err.chomp if err
-        }
+        end
       end
 
       class << self
@@ -162,56 +157,54 @@ module Archive
       def archive_info
         result = []
         cmd = "#{@tar_program} tf #{@archive_name}"
-        Open3.popen3(cmd){ |ain, aout, aerr|
+
+        Open3.popen3(cmd) do |_ain, aout, aerr|
           err = aerr.gets
           raise Error, err.chomp if err
 
-          while output = aout.gets
+          while (output = aout.gets)
             result << output.chomp
           end
-        }
+        end
+
         result
       end
 
-      alias :info :archive_info
+      alias info archive_info
 
       # Adds +files+ to an already existing archive.
       #
       def add_to_archive(*files)
-        if files.empty?
-          raise Error, "there must be at least one file specified"
-        end
+        raise Error, 'there must be at least one file specified' if files.empty?
 
-        cmd = "#{@tar_program} rf #{@archive_name} #{files.join(" ")}"
+        cmd = "#{@tar_program} rf #{@archive_name} #{files.join(' ')}"
 
-        Open3.popen3(cmd){ |ain, aout, aerr|
+        Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
           raise Error, err.chomp if err
-        }
+        end
         self
       end
 
-      alias :add :add_to_archive
+      alias add add_to_archive
 
       # Updates the given +files+ in the archive, i.e. they are added if they
       # are not already in the archive or have been modified.
       #
       def update_archive(*files)
-        if files.empty?
-          raise Error, "there must be at least one file specified"
-        end
+        raise Error, 'there must be at least one file specified' if files.empty?
 
-        cmd = "#{@tar_program} uf #{@archive_name} #{files.join(" ")}"
+        cmd = "#{@tar_program} uf #{@archive_name} #{files.join(' ')}"
 
-        Open3.popen3(cmd){ |ain, aout, aerr|
+        Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
           raise Error, err.chomp if err
-        }
+        end
 
         self
       end
 
-      alias :update :update_archive
+      alias update update_archive
 
       # Expands the contents of the tarball.  It does NOT delete the tarball.
       # If +files+ are provided, then only those files are extracted.
@@ -223,22 +216,19 @@ module Archive
       #
       def extract_archive(*files)
         cmd = "#{@tar_program} xf #{@archive_name}"
+        cmd = "#{cmd} #{files.join(' ')}" unless files.empty?
 
-        unless files.empty?
-          cmd << " " << files.join(" ")
-        end
-
-        Open3.popen3(cmd){ |ain, aout, aerr|
+        Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
           raise Error, err.chomp if err
-        }
+        end
 
         self
       end
 
-      alias :expand_archive :extract_archive
-      alias :extract :extract_archive
-      alias :expand :extract_archive
+      alias expand_archive extract_archive
+      alias extract extract_archive
+      alias expand extract_archive
 
       # A class method that behaves identically to the equivalent instance
       # method, except that you must specifiy that tarball as the first
@@ -246,15 +236,12 @@ module Archive
       #
       def self.extract_archive(archive, *files)
         cmd = "tar xf #{archive}"
+        cmd = "#{cmd} #{files.join(' ')}" unless files.empty?
 
-        unless files.empty?
-          cmd << " " << files.join(" ")
-        end
-
-        Open3.popen3(cmd){ |ain, aout, aerr|
+        Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
           raise Error, err.chomp if err
-        }
+        end
 
         self
       end
