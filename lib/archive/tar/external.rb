@@ -227,7 +227,7 @@ module Archive
         cmd = "#{@tar_program} xf #{@archive_name}"
 
         unless files.empty?
-          cmd << " " << files.join(" ")
+          cmd = cmd + ' ' + files.join(' ')
         end
 
         Open3.popen3(cmd) do |_ain, _aout, aerr|

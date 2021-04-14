@@ -35,7 +35,7 @@ class TC_ArchiveTarExternal < Test::Unit::TestCase
   end
 
   def test_version
-    assert_equal('1.4.1', Tar::External::VERSION)
+    assert_equal('1.4.2', Tar::External::VERSION)
     assert_true(Tar::External::VERSION.frozen?)
   end
 
