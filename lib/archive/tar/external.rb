@@ -194,9 +194,7 @@ module Archive
       # are not already in the archive or have been modified.
       #
       def update_archive(*files)
-        if files.empty?
-          raise Error, 'there must be at least one file specified'
-        end
+        raise Error, 'there must be at least one file specified' if files.empty?
 
         cmd = "#{@tar_program} uf #{@archive_name} #{files.join(' ')}"
 
@@ -241,9 +239,7 @@ module Archive
       def self.extract_archive(archive, *files)
         cmd = "tar xf #{archive}"
 
-        unless files.empty?
-          cmd << ' ' << files.join(' ')
-        end
+        cmd = cmd + ' ' + files.join(' ') unless files.empty?
 
         Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
