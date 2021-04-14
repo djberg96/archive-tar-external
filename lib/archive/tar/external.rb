@@ -46,13 +46,8 @@ module Archive
         @compressed_archive_name = nil
         @tar_program             = 'tar'
 
-        if file_pattern
-          create_archive(file_pattern)
-        end
-
-        if program
-          compress_archive(program)
-        end
+        create_archive(file_pattern) if file_pattern
+        compress_archive(program) if program
       end
 
       # Assign a compressed archive name.  This autogenerates the archive_name
@@ -164,14 +159,16 @@ module Archive
       def archive_info
         result = []
         cmd = "#{@tar_program} tf #{@archive_name}"
+
         Open3.popen3(cmd) do |_ain, aout, aerr|
           err = aerr.gets
           raise Error, err.chomp if err
 
-          while output = aout.gets
+          while (output = aout.gets)
             result << output.chomp
           end
         end
+
         result
       end
 
@@ -180,9 +177,7 @@ module Archive
       # Adds +files+ to an already existing archive.
       #
       def add_to_archive(*files)
-        if files.empty?
-          raise Error, 'there must be at least one file specified'
-        end
+        raise Error, 'there must be at least one file specified' if files.empty?
 
         cmd = "#{@tar_program} rf #{@archive_name} #{files.join(' ')}"
 
@@ -225,10 +220,7 @@ module Archive
       #
       def extract_archive(*files)
         cmd = "#{@tar_program} xf #{@archive_name}"
-
-        unless files.empty?
-          cmd = cmd + ' ' + files.join(' ')
-        end
+        cmd = cmd + ' ' + files.join(' ') unless files.empty?
 
         Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
