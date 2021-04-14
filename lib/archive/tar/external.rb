@@ -121,9 +121,7 @@ module Archive
       # Any errors that occur here will raise a Tar::CompressError.
       #
       def uncompress_archive(program = 'gunzip')
-        unless @compressed_archive_name
-          raise CompressError, 'no compressed file found'
-        end
+        raise CompressError, 'no compressed file found' unless @compressed_archive_name
 
         cmd = "#{program} #{@compressed_archive_name}"
 
