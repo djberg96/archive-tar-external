@@ -125,9 +125,9 @@ module Archive
       #
       # Any errors that occur here will raise a Tar::CompressError.
       #
-      def uncompress_archive(program = "gunzip")
+      def uncompress_archive(program = 'gunzip')
         unless @compressed_archive_name
-          raise CompressError, "no compressed file found"
+          raise CompressError, 'no compressed file found'
         end
 
         cmd = "#{program} #{@compressed_archive_name}"
@@ -181,7 +181,7 @@ module Archive
       #
       def add_to_archive(*files)
         if files.empty?
-          raise Error, "there must be at least one file specified"
+          raise Error, 'there must be at least one file specified'
         end
 
         cmd = "#{@tar_program} rf #{@archive_name} #{files.join(" ")}"
@@ -200,7 +200,7 @@ module Archive
       #
       def update_archive(*files)
         if files.empty?
-          raise Error, "there must be at least one file specified"
+          raise Error, 'there must be at least one file specified'
         end
 
         cmd = "#{@tar_program} uf #{@archive_name} #{files.join(" ")}"
@@ -250,7 +250,7 @@ module Archive
         cmd = "tar xf #{archive}"
 
         unless files.empty?
-          cmd << " " << files.join(" ")
+          cmd << ' ' << files.join(' ')
         end
 
         Open3.popen3(cmd) do |_ain, _aout, aerr|
