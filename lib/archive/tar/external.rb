@@ -184,7 +184,7 @@ module Archive
           raise Error, 'there must be at least one file specified'
         end
 
-        cmd = "#{@tar_program} rf #{@archive_name} #{files.join(" ")}"
+        cmd = "#{@tar_program} rf #{@archive_name} #{files.join(' ')}"
 
         Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
@@ -203,7 +203,7 @@ module Archive
           raise Error, 'there must be at least one file specified'
         end
 
-        cmd = "#{@tar_program} uf #{@archive_name} #{files.join(" ")}"
+        cmd = "#{@tar_program} uf #{@archive_name} #{files.join(' ')}"
 
         Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
