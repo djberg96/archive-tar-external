@@ -218,7 +218,7 @@ module Archive
       #
       def extract_archive(*files)
         cmd = "#{@tar_program} xf #{@archive_name}"
-        cmd = cmd + ' ' + files.join(' ') unless files.empty?
+        cmd = "#{cmd} #{files.join(' ')}" unless files.empty?
 
         Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
@@ -238,8 +238,7 @@ module Archive
       #
       def self.extract_archive(archive, *files)
         cmd = "tar xf #{archive}"
-
-        cmd = cmd + ' ' + files.join(' ') unless files.empty?
+        cmd = "#{cmd} #{files.join(' ')}" unless files.empty?
 
         Open3.popen3(cmd) do |_ain, _aout, aerr|
           err = aerr.gets
