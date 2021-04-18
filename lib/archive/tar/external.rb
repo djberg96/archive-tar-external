@@ -4,10 +4,8 @@ require 'open3'
 
 # The Archive module serves as a namespace only.
 module Archive
-
   # The Tar class serves as a toplevel class namespace only.
   class Tar
-
     # Raised if something goes wrong during the execution of any methods
     # which use the tar command internally.
     class Error < StandardError; end
@@ -61,7 +59,7 @@ module Archive
       #
       def compressed_archive_name=(name, ext = File.extname(name))
         if ext.downcase == '.tgz'
-          @archive_name = File.basename(name, ext.downcase) + '.tar'
+          @archive_name = File.basename(name, ext.downcase) << '.tar'
         else
           @archive_name = File.basename(name, ext)
         end
