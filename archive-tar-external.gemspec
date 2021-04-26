@@ -22,9 +22,9 @@ Gem::Specification.new do |spec|
     'wiki_uri'          => 'https://github.com/djberg96/archive-tar-external/wiki'
   }
 
-  spec.add_development_dependency('test-unit')
-  spec.add_development_dependency('ptools')
   spec.add_development_dependency('rake')
+  spec.add_development_dependency('rspec', '~> 3.9')
+  spec.add_development_dependency('ptools', '~> 1.4')
 
   spec.description = <<-EOF
     The archive-tar-external is a simple wrapper interface for creating
