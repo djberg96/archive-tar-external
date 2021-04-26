@@ -183,6 +183,10 @@ RSpec.describe Archive::Tar::External do
 =end
 
   after do
+    File.delete(tmp_file1) if File.exist?(tmp_file1)
+    File.delete(tmp_file2) if File.exist?(tmp_file2)
+    File.delete(tmp_file3) if File.exist?(tmp_file3)
+
     File.delete(tar_name) if File.exist?(tar_name)
     File.delete("#{tar_name}.gz") if File.exist?("#{tar_name}.gz")
     File.delete("#{tar_name}.bz2") if File.exist?("#{tar_name}.bz2")
