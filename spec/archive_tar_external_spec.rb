@@ -14,7 +14,7 @@ RSpec.describe Archive::Tar::External do
   let(:tmp_file3) { 'temp3.txt' }
 
   let(:tar_name) { 'test.tar' }
-  let(:tar_obj)  { Archive::Tar::New.new(tar_name) }
+  let(:tar_obj)  { Archive::Tar::External.new(tar_name) }
   let(:pattern)  { '*.txt' }
   let(:archive)  { 'temp.tar.gz' }
 
@@ -47,21 +47,25 @@ RSpec.describe Archive::Tar::External do
     end
   end
 
+  context "instance methods" do
+    example "tar_program getter" do
+      expect(tar_obj).to respond_to(:tar_program)
+      expect(tar_obj.tar_program).to eq('tar')
+    end
+
+    example "archive_name getter" do
+      expect(tar_obj).to respond_to(:archive_name)
+      expect(tar_obj.archive_name).to eq('test.tar')
+    end
+
+    example "archive_name setter" do
+      expect(tar_obj).to respond_to(:archive_name=)
+      expect{ tar_obj.archive_name = 'foo' }.not_to raise_error
+      expect(tar_obj.archive_name).to eq('foo')
+    end
+  end
+
 =begin
-  example "tar_program" do
-    expect(@tar).to respond_to(:tar_program)
-    expect( @tar.tar_program).to eq('tar')
-  end
-
-  example "archive_name" do
-    expect(@tar).to respond_to(:archive_name)
-    expect(@tar).to respond_to(:archive_name=)
-
-    expect( @tar.archive_name).to eq('test.tar')
-    expect{ @tar.archive_name }.not_to raise_error
-    expect{ @tar.archive_name = 'foo' }.not_to raise_error
-  end
-
   example "compressed_archive_name_get" do
     expect(@tar).to respond_to(:compressed_archive_name)
     expect(@tar.compressed_archive_name).to be_nil
