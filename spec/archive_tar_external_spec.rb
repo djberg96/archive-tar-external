@@ -63,25 +63,29 @@ RSpec.describe Archive::Tar::External do
       expect{ tar_obj.archive_name = 'foo' }.not_to raise_error
       expect(tar_obj.archive_name).to eq('foo')
     end
+
+    example "compressed_archive_name getter" do
+      expect(tar_obj).to respond_to(:compressed_archive_name)
+      expect(tar_obj.compressed_archive_name).to be_nil
+    end
+
+    example "compressed_archive_name setter basic functionality" do
+      expect(tar_obj).to respond_to(:compressed_archive_name=)
+      expect{ tar_obj.compressed_archive_name = 'test.tar.gz' }.not_to raise_error
+    end
+
+    example "setting the compressed_archive_name also sets the archive name to the expected value" do
+      tar_obj.compressed_archive_name = 'test.tar.gz'
+      expect(tar_obj.compressed_archive_name).to eq('test.tar.gz')
+      expect(tar_obj.archive_name).to eq('test.tar')
+
+      tar_obj.compressed_archive_name = 'test.tgz'
+      expect(tar_obj.compressed_archive_name).to eq('test.tgz')
+      expect(tar_obj.archive_name).to eq('test.tar')
+    end
   end
 
 =begin
-  example "compressed_archive_name_get" do
-    expect(@tar).to respond_to(:compressed_archive_name)
-    expect(@tar.compressed_archive_name).to be_nil
-  end
-
-  example "compressed_archive_name_set" do
-    expect(@tar).to respond_to(:compressed_archive_name=)
-    expect{ @tar.compressed_archive_name = 'test.tar.gz' }.not_to raise_error
-    expect( @tar.compressed_archive_name).to eq('test.tar.gz')
-    expect( @tar.archive_name).to eq('test.tar')
-
-    expect{ @tar.compressed_archive_name = 'test.tgz' }.not_to raise_error
-    expect( @tar.compressed_archive_name).to eq('test.tgz')
-    expect( @tar.archive_name).to eq('test.tar')
-  end
-
   example "create_archive basic functionality" do
     expect(@tar).to respond_to(:create_archive)
     expect{ @tar.create_archive(@pattern) }.not_to raise_error
