@@ -16,7 +16,8 @@ RSpec.describe Archive::Tar::External do
   let(:tar_name) { 'test.tar' }
   let(:tar_obj)  { Archive::Tar::External.new(tar_name) }
   let(:pattern)  { '*.txt' }
-  let(:archive)  { 'temp.tar.gz' }
+
+  let(:archive_name) { 'test.tar.gz' }
 
   before do
     File.open(tmp_file1, 'w'){ |f| f.puts 'This is a temporary text file' }
@@ -55,7 +56,7 @@ RSpec.describe Archive::Tar::External do
 
     example "archive_name getter" do
       expect(tar_obj).to respond_to(:archive_name)
-      expect(tar_obj.archive_name).to eq('test.tar')
+      expect(tar_obj.archive_name).to eq(tar_name)
     end
 
     example "archive_name setter" do
@@ -71,66 +72,69 @@ RSpec.describe Archive::Tar::External do
 
     example "compressed_archive_name setter basic functionality" do
       expect(tar_obj).to respond_to(:compressed_archive_name=)
-      expect{ tar_obj.compressed_archive_name = 'test.tar.gz' }.not_to raise_error
+      expect{ tar_obj.compressed_archive_name = archive_name }.not_to raise_error
     end
 
     example "setting the compressed_archive_name also sets the archive name to the expected value" do
-      tar_obj.compressed_archive_name = 'test.tar.gz'
-      expect(tar_obj.compressed_archive_name).to eq('test.tar.gz')
-      expect(tar_obj.archive_name).to eq('test.tar')
+      tar_obj.compressed_archive_name = archive_name
+      expect(tar_obj.compressed_archive_name).to eq(archive_name)
+      expect(tar_obj.archive_name).to eq(tar_name)
 
       tar_obj.compressed_archive_name = 'test.tgz'
       expect(tar_obj.compressed_archive_name).to eq('test.tgz')
-      expect(tar_obj.archive_name).to eq('test.tar')
+      expect(tar_obj.archive_name).to eq(tar_name)
+    end
+
+    example "create_archive basic functionality" do
+      expect(tar_obj).to respond_to(:create_archive)
+      expect{ tar_obj.create_archive(pattern) }.not_to raise_error
+      expect(File.exist?(tar_name)).to be true
+    end
+
+    example "create_archive requires at least on argument" do
+      expect{ tar_obj.create_archive }.to raise_error(ArgumentError)
+    end
+
+    example "create_archive raises an error if no files match the pattern" do
+      expect{ tar_obj.create_archive('*.blah') }.to raise_error(Archive::Tar::Error)
+    end
+
+    example "create_archive accepts optional parameters" do
+      expect{ tar_obj.create_archive(pattern, 'cfj') }.not_to raise_error
+    end
+
+    example "create is an alias for create_archive" do
+      expect(tar_obj).to respond_to(:create)
+      expect(tar_obj.method(:create)).to eq(tar_obj.method(:create_archive))
+    end
+  end
+
+  context "compression" do
+    example "compress_archive basic functionality" do
+      expect(tar_obj).to respond_to(:compress_archive)
+    end
+
+    example "compress is an alias for compress_archive" do
+      expect(tar_obj).to respond_to(:compress)
+      expect(tar_obj.method(:compress)).to eq(tar_obj.method(:compress_archive))
+    end
+
+    example "compress_archive defaults to gzip", :gzip => true do
+      tar_obj.create_archive('*.txt')
+      tar_obj.compress_archive
+
+      expect(tar_obj.compressed_archive_name).to eq(archive_name)
+      expect(File.exist?(archive_name)).to be true
+    end
+
+    example "compress_archive works with bzip2", :bzip2 => true do
+      expect{ tar_obj.create_archive('*.txt') }.not_to raise_error
+      expect{ tar_obj.compress_archive('bzip2') }.not_to raise_error
+      expect(File.exist?('test.tar.bz2')).to be true
     end
   end
 
 =begin
-  example "create_archive basic functionality" do
-    expect(@tar).to respond_to(:create_archive)
-    expect{ @tar.create_archive(@pattern) }.not_to raise_error
-    expect(File.exist?(@tar_name)).to be true
-  end
-
-  example "create_archive requires at least on argument" do
-    expect{ @tar.create_archive }.to raise_error(ArgumentError)
-  end
-
-  example "create_archive raises an error if no files match the pattern" do
-    expect{ @tar.create_archive('*.blah') }.to raise_error(Tar::Error)
-  end
-
-  example "create_archive accepts optional parameters" do
-    expect{ @tar.create_archive(@pattern, 'cfj') }.not_to raise_error
-  end
-
-  example "create_alias" do
-    expect(@tar).to respond_to(:create)
-    expect(Tar::External.instance_method(:create) == Tar::External.instance_method(:create_archive)).to be true
-  end
-
-  example "compress_archive_basic" do
-    expect(@tar).to respond_to(:compress_archive)
-  end
-
-  example "compress_alias" do
-    expect(@tar).to respond_to(:compress)
-    expect(Tar::External.instance_method(:compress) == Tar::External.instance_method(:compress_archive)).to be true
-  end
-
-  example "compress_archive_gzip" do
-    expect{ @tar.create_archive('*.txt') }.not_to raise_error
-    expect{ @tar.compress_archive }.not_to raise_error
-
-    expect( @tar.compressed_archive_name).to eq('test.tar.gz')
-    expect(File.exist?('test.tar.gz')).to be true
-  end
-
-  example "compress_archive_bzip2" do
-    expect{ @tar.create_archive('*.txt') }.not_to raise_error
-    expect{ @tar.compress_archive('bzip2') }.not_to raise_error
-    expect(File.exist?('test.tar.bz2')).to be true
-  end
 
   example "uncompress_archive" do
     expect(@tar).to respond_to(:uncompress_archive)
