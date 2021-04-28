@@ -37,11 +37,11 @@ RSpec.describe Archive::Tar::External do
     end
 
     example "with name and extension" do
-      expect{ Archive::Tar::External.new(tar_name, '*.txt') }.not_to raise_error
+      expect{ Archive::Tar::External.new(tar_name, pattern) }.not_to raise_error
     end
 
     example "with compression program", :gzip => true do
-      expect{ Archive::Tar::External.new(tar_name, '*.txt', 'gzip') }.not_to raise_error
+      expect{ Archive::Tar::External.new(tar_name, pattern, 'gzip') }.not_to raise_error
     end
 
     example "raises an error if name is not provided" do
@@ -121,7 +121,7 @@ RSpec.describe Archive::Tar::External do
     end
 
     example "compress_archive defaults to gzip", :gzip => true do
-      tar_obj.create_archive('*.txt')
+      tar_obj.create_archive(pattern)
       tar_obj.compress_archive
 
       expect(tar_obj.compressed_archive_name).to eq(archive_name)
@@ -129,7 +129,7 @@ RSpec.describe Archive::Tar::External do
     end
 
     example "compress_archive works with bzip2", :bzip2 => true do
-      expect{ tar_obj.create_archive('*.txt') }.not_to raise_error
+      expect{ tar_obj.create_archive(pattern) }.not_to raise_error
       expect{ tar_obj.compress_archive('bzip2') }.not_to raise_error
       expect(File.exist?('test.tar.bz2')).to be true
     end
@@ -137,7 +137,7 @@ RSpec.describe Archive::Tar::External do
 
   context "uncompression" do
     before do
-      tar_obj.create_archive('*.txt').compress_archive
+      tar_obj.create_archive(pattern).compress_archive
     end
 
     example "uncompress_archive basic functionality" do
@@ -165,7 +165,7 @@ RSpec.describe Archive::Tar::External do
     end
 
     example "archive_info returns the expected value" do
-      tar_obj.create_archive('*.txt')
+      tar_obj.create_archive(pattern)
       expect(tar_obj.archive_info).to eq([tmp_file1, tmp_file2, tmp_file3])
     end
 
@@ -197,17 +197,17 @@ RSpec.describe Archive::Tar::External do
     end
 
     example "extract_archive raises an error if the file isn't in the archive" do
-      tar_obj.create('*.txt')
+      tar_obj.create(pattern)
       expect{ tar_obj.expand('blah.txt') }.to raise_error(Archive::Tar::Error)
     end
 
     example "extract_archive with no arguments extracts all files" do
-      tar_obj.create('*.txt')
+      tar_obj.create(pattern)
       expect{ tar_obj.extract_archive }.not_to raise_error
     end
 
     example "extract_archive with a valid file argument behaves as expected" do
-      tar_obj.create('*.txt')
+      tar_obj.create(pattern)
       expect{ tar_obj.extract_archive(tmp_file2) }.not_to raise_error
     end
 
