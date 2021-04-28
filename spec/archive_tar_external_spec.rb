@@ -158,48 +158,59 @@ RSpec.describe Archive::Tar::External do
     end
   end
 
-=begin
+  context "archive" do
+    example "archive_info basic functionality" do
+      expect(tar_obj).to respond_to(:archive_info)
+    end
 
-  example "archive_info" do
-    expect(@tar).to respond_to(:archive_info)
-    expect{ @tar.create_archive('*.txt') }.not_to raise_error
-    expect( @tar.archive_info).to eq(['temp1.txt','temp2.txt','temp3.txt'])
+    example "archive_info returns the expected value" do
+      tar_obj.create_archive('*.txt')
+      expect(tar_obj.archive_info).to eq([tmp_file1, tmp_file2, tmp_file3])
+    end
+
+    example "add_to_archive basic functionality" do
+      expect(tar_obj).to respond_to(:add_to_archive)
+    end
+
+    example "add_to_archive works as expected" do
+      tar_obj = described_class.new(tar_name)
+      expect{ tar_obj.add_to_archive(tmp_file2) }.not_to raise_error
+      expect{ tar_obj.add_to_archive(tmp_file2, tmp_file3) }.not_to raise_error
+      expect(tar_obj.archive_info).to eq([tmp_file2, tmp_file2, tmp_file3])
+    end
+
+    example "update_archive basic functionality" do
+      expect(tar_obj).to respond_to(:update_archive)
+    end
+
+    example "update_archive behaves as expected" do
+      tar_obj.create_archive(pattern)
+      expect(tar_obj.archive_info).to eq([tmp_file1, tmp_file2, tmp_file3])
+      tar_obj.update_archive(tmp_file2)
+      expect(tar_obj.archive_info).to eq([tmp_file1, tmp_file2, tmp_file3])
+    end
+
+    example "extract_archive_basic" do
+      expect(tar_obj).to respond_to(:extract_archive)
+    end
+
+    example "extract_archive_aliases" do
+      expect(Tar::External.instance_method(:extract_archive) == Tar::External.instance_method(:expand_archive)).to be true
+      expect(Tar::External.instance_method(:extract) == Tar::External.instance_method(:expand_archive)).to be true
+      expect(Tar::External.instance_method(:expand) == Tar::External.instance_method(:expand_archive)).to be true
+    end
+
+    example "extract_archive_advanced" do
+      skip unless RbConfig::CONFIG['host_os'] =~ /sunos|solaris/{
+        expect{ tar_obj.tar_program = @@gtar }.not_to raise_error
+      }
+      expect{ tar_obj.create('*.txt') }.not_to raise_error
+      expect{ tar_obj.expand('blah.txt') }.to raise_error(Tar::Error)
+
+      expect{ tar_obj.extract_archive }.not_to raise_error
+      expect{ tar_obj.extract_archive('temp2.txt') }.not_to raise_error
+    end
   end
-
-  example "add_to_archive" do
-    assert_respond_to(@tar,:add_to_archive)
-    expect{ @tar.create_archive('temp1.txt') }.not_to raise_error
-    expect{ @tar.add_to_archive('temp2.txt') }.not_to raise_error
-    expect{ @tar.add_to_archive('temp2.txt','temp3.txt') }.not_to raise_error
-  end
-
-  example "update_archive" do
-    expect(@tar).to respond_to(:update_archive)
-    expect{ @tar.create_archive('*.txt') }.not_to raise_error
-    expect{ @tar.update_archive('temp2.txt') }.not_to raise_error
-  end
-
-  example "extract_archive_basic" do
-    expect(@tar).to respond_to(:extract_archive)
-  end
-
-  example "extract_archive_aliases" do
-    expect(Tar::External.instance_method(:extract_archive) == Tar::External.instance_method(:expand_archive)).to be true
-    expect(Tar::External.instance_method(:extract) == Tar::External.instance_method(:expand_archive)).to be true
-    expect(Tar::External.instance_method(:expand) == Tar::External.instance_method(:expand_archive)).to be true
-  end
-
-  example "extract_archive_advanced" do
-    skip unless RbConfig::CONFIG['host_os'] =~ /sunos|solaris/{
-      expect{ @tar.tar_program = @@gtar }.not_to raise_error
-    }
-    expect{ @tar.create('*.txt') }.not_to raise_error
-    expect{ @tar.expand('blah.txt') }.to raise_error(Tar::Error)
-
-    expect{ @tar.extract_archive }.not_to raise_error
-    expect{ @tar.extract_archive('temp2.txt') }.not_to raise_error
-  end
-=end
 
   after do
     File.delete(tmp_file1) if File.exist?(tmp_file1)
