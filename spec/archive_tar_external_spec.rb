@@ -134,24 +134,31 @@ RSpec.describe Archive::Tar::External do
     end
   end
 
+  context "uncompression" do
+    before do
+      tar_obj.create_archive('*.txt').compress_archive
+    end
+
+    example "uncompress_archive basic functionality" do
+      expect(tar_obj).to respond_to(:uncompress_archive)
+    end
+
+    example "uncompress_archive behaves as expected" do
+      expect{ tar_obj.uncompress_archive }.not_to raise_error
+      expect(File.exist?(archive_name)).to be false
+    end
+
+    example "uncompress is an alias for uncompress_archive" do
+      expect(tar_obj).to respond_to(:uncompress)
+      expect(tar_obj.method(:uncompress)).to eq (tar_obj.method(:uncompress_archive))
+    end
+
+    example "uncompress_archive singleton method" do
+      expect(Archive::Tar::External).to respond_to(:uncompress_archive)
+    end
+  end
+
 =begin
-
-  example "uncompress_archive" do
-    expect(@tar).to respond_to(:uncompress_archive)
-    expect{ @tar.create_archive('*.txt') }.not_to raise_error
-    expect{ @tar.compress_archive }.not_to raise_error
-    expect{ @tar.uncompress_archive }.not_to raise_error
-    expect(File.exist?('test.tar.gz')).to be false
-  end
-
-  example "uncompress_archive_class_method" do
-    expect(Tar::External).to respond_to(:uncompress_archive)
-  end
-
-  example "uncompress_alias" do
-    expect(Tar::External).to respond_to(:uncompress)
-    expect(Tar::External.method(:uncompress) == Tar::External.method(:uncompress_archive)).to be true
-  end
 
   example "archive_info" do
     expect(@tar).to respond_to(:archive_info)
