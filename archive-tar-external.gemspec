@@ -3,13 +3,13 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name       = 'archive-tar-external'
-  spec.version    = '1.4.1'
+  spec.version    = '1.4.2'
   spec.summary    = 'A simple way to create tar archives using external calls'
   spec.license    = 'Apache-2.0'
   spec.author     = 'Daniel Berger'
   spec.email      = 'djberg96@gmail.com'
   spec.homepage   = 'http://github.com/djberg96/archive-tar-external'
-  spec.test_file  = 'test/test_archive_tar_external.rb'
+  spec.test_files = Dir['spec/*.rb']
   spec.files      = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain = Dir['certs/*']
 
@@ -22,9 +22,9 @@ Gem::Specification.new do |spec|
     'wiki_uri'          => 'https://github.com/djberg96/archive-tar-external/wiki'
   }
 
-  spec.add_development_dependency('test-unit')
-  spec.add_development_dependency('ptools')
   spec.add_development_dependency('rake')
+  spec.add_development_dependency('rspec', '~> 3.9')
+  spec.add_development_dependency('ptools', '~> 1.4')
 
   spec.description = <<-EOF
     The archive-tar-external is a simple wrapper interface for creating

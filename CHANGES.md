@@ -1,3 +1,10 @@
+## 1.4.2 - 1-May-2021
+* Switched from test-unit to rspec.
+* Added tighter versioning for the development dependencies.
+* Tests will now try to use gtar by default, if found.
+* A fair number of rubocop suggestions were implemented, including
+  the frozen string literal pragma.
+
 ## 1.4.1 - 19-Feb-2021
 * Switched from rdoc to markdown.
 
