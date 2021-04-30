@@ -5,8 +5,7 @@
 # run via the 'rake spec' Rake task.
 ###############################################################################
 require 'archive/tar/external'
-require 'rspec'
-require 'ptools'
+require 'spec_helper'
 
 RSpec.describe Archive::Tar::External do
   let(:tmp_file1) { 'temp1.txt' }
@@ -16,11 +15,13 @@ RSpec.describe Archive::Tar::External do
   let(:tar_name) { 'test.tar' }
   let(:tar_obj)  { Archive::Tar::External.new(tar_name) }
   let(:pattern)  { '*.txt' }
+  let(:gtar)     { File.basename(File.which('gtar')) }
 
   let(:archive_name) { 'test.tar.gz' }
+  let(:tar_program)  { gtar || 'tar' }
 
   before do
-    tar_obj.tar_program = 'gtar' if RbConfig::CONFIG['host_os'] =~ /sunos|solaris/i
+    tar_obj.tar_program = 'gtar' if File.which('gtar')
     File.open(tmp_file1, 'w'){ |f| f.puts 'This is a temporary text file' }
     File.open(tmp_file2, 'w'){ |f| f.puts 'This is a temporary text file' }
     File.open(tmp_file3, 'w'){ |f| f.puts 'This is a temporary text file' }
@@ -52,7 +53,7 @@ RSpec.describe Archive::Tar::External do
   context "instance methods" do
     example "tar_program getter" do
       expect(tar_obj).to respond_to(:tar_program)
-      expect(tar_obj.tar_program).to eq('tar')
+      expect(tar_obj.tar_program).to eq(tar_program)
     end
 
     example "archive_name getter" do
@@ -184,12 +185,11 @@ RSpec.describe Archive::Tar::External do
       expect(tar_obj).to respond_to(:update_archive)
     end
 
-    # TODO: something busted here
-    example "update_archive behaves as expected" do
+    example "update_archive behaves as expected", :gtar => true do
       tar_obj.create_archive(pattern)
       expect(tar_obj.archive_info).to eq([tmp_file1, tmp_file2, tmp_file3])
       tar_obj.update_archive(tmp_file2)
-      #expect(tar_obj.archive_info).to eq([tmp_file1, tmp_file2, tmp_file3])
+      expect(tar_obj.archive_info).to eq([tmp_file1, tmp_file2, tmp_file3])
     end
 
     example "extract_archive_basic" do
