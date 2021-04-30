@@ -9,4 +9,5 @@
 * doc/tar_external.md
 * lib/archive-tar-external.rb
 * lib/archive/tar_external.rb
-* test/test_archive_tar_external.rb
+* spec/archive_tar_external_spec.rb
+* spec/spec_helper.rb
