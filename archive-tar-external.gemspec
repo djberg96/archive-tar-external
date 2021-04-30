@@ -3,7 +3,7 @@ require 'rbconfig'
 
 Gem::Specification.new do |spec|
   spec.name       = 'archive-tar-external'
-  spec.version    = '1.4.1'
+  spec.version    = '1.4.2'
   spec.summary    = 'A simple way to create tar archives using external calls'
   spec.license    = 'Apache-2.0'
   spec.author     = 'Daniel Berger'
