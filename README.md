@@ -22,8 +22,15 @@ t = Archive::Tar::External.new('test.tar', '*.rb', 'gzip')
 * At least one compression program, e.g. gzip, bzip2, zip, etc.
    
 ## Known Issues
+
+### Solaris
 The tar program that comes with Solaris will not raise an error if you
 try to expand a file from an archive that does not contain that file.
+
+### OSX
+It appears that the BSD tar that ships on Mac does not implement the -u
+option properly, and will add a file to the archive even if the timestamp
+of the file hasn't changed.
 
 If you come across any other issues, please report them on the project
 page at https://github.com/djberg96/archive-tar-external.
