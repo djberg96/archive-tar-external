@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.author     = 'Daniel Berger'
   spec.email      = 'djberg96@gmail.com'
   spec.homepage   = 'http://github.com/djberg96/archive-tar-external'
-  spec.test_file  = 'test/test_archive_tar_external.rb'
+  spec.test_files = Dir['spec/*.rb']
   spec.files      = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain = Dir['certs/*']
 
