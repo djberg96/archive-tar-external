@@ -29,8 +29,11 @@ try to expand a file from an archive that does not contain that file.
 
 ### OSX
 It appears that the BSD tar that ships on Mac does not implement the -u
-option properly, and will add a file to the archive even if the timestamp
-of the file hasn't changed.
+option properly by default, and will add a file to the archive even if
+the timestamp of the file hasn't changed.
+
+The OSX issue was effectively addressed in version 1.5.0, where the default
+archive format was added and set to 'pax'.
 
 If you come across any other issues, please report them on the project
 page at https://github.com/djberg96/archive-tar-external.
