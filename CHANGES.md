@@ -1,4 +1,8 @@
-## 1.4.2 - 1-May-2021
+## 1.5.0 - 1-May-2021
+* A fourth option was added to the constructor. This allows you to set the
+  archive format. By default this is now set to 'pax'.
+
+## 1.4.2 - 30-Apr-2021
 * Switched from test-unit to rspec.
 * Added tighter versioning for the development dependencies.
 * Tests will now try to use gtar by default, if found.
