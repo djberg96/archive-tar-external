@@ -26,7 +26,7 @@ RSpec.describe Archive::Tar::External do
   end
 
   example "version" do
-    expect(Archive::Tar::External::VERSION).to eq('1.4.2')
+    expect(Archive::Tar::External::VERSION).to eq('1.5.0')
     expect(Archive::Tar::External::VERSION).to be_frozen
   end
 
