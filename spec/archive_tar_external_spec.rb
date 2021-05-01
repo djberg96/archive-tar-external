@@ -99,7 +99,7 @@ RSpec.describe Archive::Tar::External do
       expect{ tar_obj.create_archive('*.blah') }.to raise_error(Archive::Tar::Error)
     end
 
-    example "create_archive accepts optional parameters", :stuff => true do
+    example "create_archive accepts optional parameters" do
       expect{ tar_obj.create_archive(pattern, 'jcf') }.not_to raise_error
     end
 
