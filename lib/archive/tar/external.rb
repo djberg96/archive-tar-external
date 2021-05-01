@@ -17,32 +17,40 @@ module Archive
     # This class encapsulates tar & zip operations.
     class Tar::External
       # The version of the archive-tar-external library.
-      VERSION = '1.4.2'
+      VERSION = '1.5.0'
 
       # The name of the archive file to be used, e.g. "test.tar"
       attr_accessor :archive_name
 
-      # The name of the tar program you wish to use.  The default is "tar".
+      # The name of the tar program you wish to use. The default is "tar".
       attr_accessor :tar_program
 
       # The name of the archive file after compression, e.g. "test.tar.gz"
       attr_reader :compressed_archive_name
 
-      # Returns an Archive::Tar::External object.  The +archive_name+ is the
-      # name of the tarball.  While a .tar extension is recommended based on
+      # The format of the archive file. The default is "pax".
+      attr_reader :format
+
+      # Returns an Archive::Tar::External object. The +archive_name+ is the
+      # name of the tarball. While a .tar extension is recommended based on
       # years of convention, it is not enforced.
       #
       # Note that this does not actually create the archive unless you
-      # pass a value to +file_pattern+.  This then becomes a shortcut for
+      # pass a value to +file_pattern+. This then becomes a shortcut for
       # Archive::Tar::External.new + Archive::Tar::External#create_archive.
       #
       # If +program+ is provided, then it compresses the archive as well by
       # calling Archive::Tar::External#compress_archive internally.
       #
-      def initialize(archive_name, file_pattern = nil, program = nil)
+      # You may also specify an archive format. As of version 1.5, the
+      # default is 'pax'. Previous versions used whatever your tar program
+      # used by default.
+      #
+      def initialize(archive_name, file_pattern = nil, program = nil, format = 'pax')
         @archive_name            = archive_name.to_s
         @compressed_archive_name = nil
         @tar_program             = 'tar'
+        @format                  = 'pax'
 
         create_archive(file_pattern) if file_pattern
         compress_archive(program) if program
@@ -67,12 +75,13 @@ module Archive
       end
 
       # Creates the archive using +file_pattern+ using +options+ or 'cf'
-      # (create file) by default.
+      # (create file) by default. The 'f' option should always be present
+      # and always be last.
       #
       # Raises an Archive::Tar::Error if a failure occurs.
       #
       def create_archive(file_pattern, options = 'cf')
-        cmd = "#{@tar_program} #{options} #{@archive_name} #{file_pattern}"
+        cmd = "#{@tar_program} --format #{@format} -#{options} #{@archive_name} #{file_pattern}"
 
         Open3.popen3(cmd) do |_tar_in, _tar_out, tar_err|
           err = tar_err.gets
