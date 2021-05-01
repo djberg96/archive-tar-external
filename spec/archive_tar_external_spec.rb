@@ -15,13 +15,11 @@ RSpec.describe Archive::Tar::External do
   let(:tar_name) { 'test.tar' }
   let(:tar_obj)  { Archive::Tar::External.new(tar_name) }
   let(:pattern)  { '*.txt' }
-  let(:gtar)     { File.basename(File.which('gtar')) }
 
   let(:archive_name) { 'test.tar.gz' }
-  let(:tar_program)  { gtar || 'tar' }
+  let(:tar_program)  { 'tar' }
 
   before do
-    tar_obj.tar_program = 'gtar' if File.which('gtar')
     File.open(tmp_file1, 'w'){ |f| f.puts 'This is a temporary text file' }
     File.open(tmp_file2, 'w'){ |f| f.puts 'This is a temporary text file' }
     File.open(tmp_file3, 'w'){ |f| f.puts 'This is a temporary text file' }
@@ -101,8 +99,8 @@ RSpec.describe Archive::Tar::External do
       expect{ tar_obj.create_archive('*.blah') }.to raise_error(Archive::Tar::Error)
     end
 
-    example "create_archive accepts optional parameters" do
-      expect{ tar_obj.create_archive(pattern, 'cfj') }.not_to raise_error
+    example "create_archive accepts optional parameters", :stuff => true do
+      expect{ tar_obj.create_archive(pattern, 'jcf') }.not_to raise_error
     end
 
     example "create is an alias for create_archive" do
@@ -185,7 +183,7 @@ RSpec.describe Archive::Tar::External do
       expect(tar_obj).to respond_to(:update_archive)
     end
 
-    example "update_archive behaves as expected", :gtar => true do
+    example "update_archive behaves as expected" do
       tar_obj.create_archive(pattern)
       expect(tar_obj.archive_info).to eq([tmp_file1, tmp_file2, tmp_file3])
       tar_obj.update_archive(tmp_file2)
