@@ -107,6 +107,11 @@ RSpec.describe Archive::Tar::External do
       expect(tar_obj).to respond_to(:create)
       expect(tar_obj.method(:create)).to eq(tar_obj.method(:create_archive))
     end
+
+    example "format getter" do
+      expect(tar_obj).to respond_to(:format)
+      expect(tar_obj.format).to eq('pax')
+    end
   end
 
   context "compression" do
