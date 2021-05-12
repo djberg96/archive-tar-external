@@ -8,7 +8,7 @@ namespace :gem do
   desc 'Build the archive-tar-external gem'
   task :create do
     require 'rubygems/package'
-    spec = eval(IO.read('archive-tar-external.gemspec'))
+    spec = Gem::Specification.load('archive-tar-external.gemspec')
     spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
     Gem::Package.build(spec)
   end
