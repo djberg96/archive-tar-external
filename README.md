@@ -1,3 +1,5 @@
+[![Ruby](https://github.com/djberg96/archive-tar-external/actions/workflows/ruby.yml/badge.svg)](https://github.com/djberg96/archive-tar-external/actions/workflows/ruby.yml)
+
 ## Description
 A simple tar & compress library that nicely wraps external system calls.
 
