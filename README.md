@@ -23,10 +23,6 @@ t = Archive::Tar::External.new('test.tar', '*.rb', 'gzip')
    
 ## Known Issues
 
-### Solaris
-The tar program that comes with Solaris will not raise an error if you
-try to expand a file from an archive that does not contain that file.
-
 ### OSX
 It appears that the BSD tar that ships on Mac does not implement the -u
 option properly by default, and will add a file to the archive even if
@@ -37,6 +33,18 @@ archive format was added and set to 'pax'.
 
 If you come across any other issues, please report them on the project
 page at https://github.com/djberg96/archive-tar-external.
+
+### Windows
+MS Windows did not have a tar commmand until part way through the Windows 10
+lifecycle. If you do not have it then you will need to install it, either as
+a native command or use something like Cygwin.
+
+### Solaris
+The tar program that comes with Solaris will not raise an error if you
+try to expand a file from an archive that does not contain that file.
+
+Note that Solaris is essentially dead at this point, so I will generally
+not be accepting patches for it.
 
 ## History
 This project was originally named "archive-tarsimple", but was renamed
