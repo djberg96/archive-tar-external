@@ -50,7 +50,7 @@ module Archive
         @archive_name            = archive_name.to_s
         @compressed_archive_name = nil
         @tar_program             = 'tar'
-        @format                  = 'pax'
+        @format                  = format
 
         create_archive(file_pattern) if file_pattern
         compress_archive(program) if program
