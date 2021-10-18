@@ -13,7 +13,7 @@ RSpec.describe Archive::Tar::External do
   let(:tmp_file3) { 'temp3.txt' }
 
   let(:tar_name) { 'test.tar' }
-  let(:tar_obj)  { Archive::Tar::External.new(tar_name) }
+  let(:tar_obj)  { described_class.new(tar_name) }
   let(:pattern)  { '*.txt' }
 
   let(:archive_name) { 'test.tar.gz' }
@@ -32,19 +32,19 @@ RSpec.describe Archive::Tar::External do
 
   context 'constructor' do
     example 'with name' do
-      expect{ Archive::Tar::External.new(tar_name) }.not_to raise_error
+      expect{ described_class.new(tar_name) }.not_to raise_error
     end
 
     example 'with name and extension' do
-      expect{ Archive::Tar::External.new(tar_name, pattern) }.not_to raise_error
+      expect{ described_class.new(tar_name, pattern) }.not_to raise_error
     end
 
     example 'with compression program', :gzip => true do
-      expect{ Archive::Tar::External.new(tar_name, pattern, 'gzip') }.not_to raise_error
+      expect{ described_class.new(tar_name, pattern, 'gzip') }.not_to raise_error
     end
 
     example 'raises an error if name is not provided' do
-      expect{ Archive::Tar::External.new }.to raise_error(ArgumentError)
+      expect{ described_class.new }.to raise_error(ArgumentError)
     end
   end
 
@@ -159,7 +159,7 @@ RSpec.describe Archive::Tar::External do
     end
 
     example 'uncompress_archive singleton method' do
-      expect(Archive::Tar::External).to respond_to(:uncompress_archive)
+      expect(described_class).to respond_to(:uncompress_archive)
     end
   end
 

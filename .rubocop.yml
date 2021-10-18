@@ -25,6 +25,8 @@ Layout/EmptyLineAfterGuardClause:
   Enabled: false
 Layout/CaseIndentation:
   IndentOneStep: true
+Layout/SpaceBeforeBlockBraces:
+  Enabled: false
 Metrics/AbcSize:
   Enabled: false
 Metrics/BlockLength:
