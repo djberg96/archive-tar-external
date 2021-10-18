@@ -1,3 +1,14 @@
+require: rubocop-rspec
+
+RSpec/MultipleExpectations:
+  Max: 4
+RSpec/ContextWording:
+  Enabled: false
+RSpec/FilePath:
+  SpecSuffixOnly: true
+RSpec/InstanceVariable:
+  Enabled: false
+
 AllCops:
   NewCops: enable
 Lint/AssignmentInCondition:
@@ -14,8 +25,12 @@ Layout/EmptyLineAfterGuardClause:
   Enabled: false
 Layout/CaseIndentation:
   IndentOneStep: true
+Layout/SpaceBeforeBlockBraces:
+  Enabled: false
 Metrics/AbcSize:
   Enabled: false
+Metrics/BlockLength:
+  IgnoredMethods: ['describe', 'context']
 Metrics/ClassLength:
   Enabled: false
 Metrics/MethodLength:
