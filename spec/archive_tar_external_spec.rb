@@ -155,7 +155,7 @@ RSpec.describe Archive::Tar::External do
 
     example 'uncompress is an alias for uncompress_archive' do
       expect(tar_obj).to respond_to(:uncompress)
-      expect(tar_obj.method(:uncompress)).to eq (tar_obj.method(:uncompress_archive))
+      expect(tar_obj.method(:uncompress)).to eq(tar_obj.method(:uncompress_archive))
     end
 
     example 'uncompress_archive singleton method' do
