@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###############################################################################
 # archive_tar_external_spec.rb
 #
