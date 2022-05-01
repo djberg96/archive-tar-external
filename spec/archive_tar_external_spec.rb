@@ -27,6 +27,17 @@ RSpec.describe Archive::Tar::External do
     File.open(tmp_file3, 'w'){ |f| f.puts 'This is a temporary text file' }
   end
 
+  after do
+    File.delete(tmp_file1) if File.exist?(tmp_file1)
+    File.delete(tmp_file2) if File.exist?(tmp_file2)
+    File.delete(tmp_file3) if File.exist?(tmp_file3)
+
+    File.delete(tar_name) if File.exist?(tar_name)
+    File.delete("#{tar_name}.gz") if File.exist?("#{tar_name}.gz")
+    File.delete("#{tar_name}.bz2") if File.exist?("#{tar_name}.bz2")
+    File.delete("#{tar_name}.zip") if File.exist?("#{tar_name}.zip")
+  end
+
   example 'version' do
     expect(Archive::Tar::External::VERSION).to eq('1.5.0')
     expect(Archive::Tar::External::VERSION).to be_frozen
@@ -221,16 +232,5 @@ RSpec.describe Archive::Tar::External do
       expect(tar_obj.method(:expand)).to eq(tar_obj.method(:extract_archive))
       expect(tar_obj.method(:extract)).to eq(tar_obj.method(:extract_archive))
     end
-  end
-
-  after do
-    File.delete(tmp_file1) if File.exist?(tmp_file1)
-    File.delete(tmp_file2) if File.exist?(tmp_file2)
-    File.delete(tmp_file3) if File.exist?(tmp_file3)
-
-    File.delete(tar_name) if File.exist?(tar_name)
-    File.delete("#{tar_name}.gz") if File.exist?("#{tar_name}.gz")
-    File.delete("#{tar_name}.bz2") if File.exist?("#{tar_name}.bz2")
-    File.delete("#{tar_name}.zip") if File.exist?("#{tar_name}.zip")
   end
 end

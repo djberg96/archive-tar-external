@@ -25,6 +25,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('rake')
   spec.add_development_dependency('rspec', '~> 3.9')
   spec.add_development_dependency('ptools', '~> 1.4')
+  spec.add_development_dependency('rubocop')
+  spec.add_development_dependency('rubocop-rspec')
 
   spec.description = <<-EOF
     The archive-tar-external is a simple wrapper interface for creating

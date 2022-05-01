@@ -8,9 +8,17 @@ RSpec/FilePath:
   SpecSuffixOnly: true
 RSpec/InstanceVariable:
   Enabled: false
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+RSpec/ExampleLength:
+  Max: 6
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - archive-tar-external.gemspec
+    - Gemfile
+    - Rakefile
 Lint/AssignmentInCondition:
   Enabled: false
 Style/HashSyntax:
