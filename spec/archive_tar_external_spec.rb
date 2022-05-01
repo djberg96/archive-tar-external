@@ -37,6 +37,7 @@ RSpec.describe Archive::Tar::External do
     File.delete("#{tar_name}.bz2") if File.exist?("#{tar_name}.bz2")
     File.delete("#{tar_name}.zip") if File.exist?("#{tar_name}.zip")
   end
+
   example 'version' do
     expect(Archive::Tar::External::VERSION).to eq('1.5.0')
     expect(Archive::Tar::External::VERSION).to be_frozen
@@ -232,5 +233,4 @@ RSpec.describe Archive::Tar::External do
       expect(tar_obj.method(:extract)).to eq(tar_obj.method(:extract_archive))
     end
   end
-
 end
