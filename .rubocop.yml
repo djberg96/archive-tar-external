@@ -11,6 +11,10 @@ RSpec/InstanceVariable:
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - archive-tar-external.gemspec
+    - Gemfile
+    - Rakefile
 Lint/AssignmentInCondition:
   Enabled: false
 Style/HashSyntax:
