@@ -5,6 +5,9 @@ A simple tar & compress library that nicely wraps external system calls.
 
 ## Installation
 `gem install archive-tar-external`
+
+## Adding the trusted cert
+`gem cert --add <(curl -Ls https://raw.githubusercontent.com/djberg96/archive-tar-external/main/certs/djberg96_pub.pem)`
    
 ## Synopsis
 ```ruby
@@ -62,7 +65,7 @@ implied warranties, including, without limitation, the implied
 warranties of merchantability and fitness for a particular purpose.
 
 ## Copyright
-(C) 2003 - 2021 Daniel J. Berger
+(C) 2003 - 2023 Daniel J. Berger
 All Rights Reserved
 
 ## Author
