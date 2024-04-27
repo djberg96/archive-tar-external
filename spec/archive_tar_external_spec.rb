@@ -11,9 +11,9 @@ require 'spec_helper'
 require 'fileutils'
 
 RSpec.describe Archive::Tar::External do
-  let(:tmp_file1) { 'temp1.txt' }
-  let(:tmp_file2) { 'temp2.txt' }
-  let(:tmp_file3) { 'temp3.txt' }
+  let(:first_temp_file)  { 'temp1.txt' }
+  let(:second_temp_file) { 'temp2.txt' }
+  let(:third_temp_file)  { 'temp3.txt' }
 
   let(:tar_name) { 'test.tar' }
   let(:tar_obj)  { described_class.new(tar_name) }
@@ -23,15 +23,15 @@ RSpec.describe Archive::Tar::External do
   let(:tar_program)  { 'tar' }
 
   before do
-    File.open(tmp_file1, 'w'){ |f| f.puts 'This is a temporary text file' }
-    File.open(tmp_file2, 'w'){ |f| f.puts 'This is a temporary text file' }
-    File.open(tmp_file3, 'w'){ |f| f.puts 'This is a temporary text file' }
+    File.open(first_temp_file, 'w'){ |f| f.puts 'This is a temporary text file' }
+    File.open(second_temp_file, 'w'){ |f| f.puts 'This is a temporary text file' }
+    File.open(third_temp_file, 'w'){ |f| f.puts 'This is a temporary text file' }
   end
 
   after do
-    FileUtils.rm_f(tmp_file1)
-    FileUtils.rm_f(tmp_file2)
-    FileUtils.rm_f(tmp_file3)
+    FileUtils.rm_f(first_temp_file)
+    FileUtils.rm_f(second_temp_file)
+    FileUtils.rm_f(third_temp_file)
 
     FileUtils.rm_f(tar_name)
     FileUtils.rm_f("#{tar_name}.gz")
@@ -184,7 +184,7 @@ RSpec.describe Archive::Tar::External do
 
     example 'archive_info returns the expected value' do
       tar_obj.create_archive(pattern)
-      expect(tar_obj.archive_info).to eq([tmp_file1, tmp_file2, tmp_file3])
+      expect(tar_obj.archive_info).to eq([first_temp_file, second_temp_file, third_temp_file])
     end
 
     example 'add_to_archive basic functionality' do
@@ -193,9 +193,9 @@ RSpec.describe Archive::Tar::External do
 
     example 'add_to_archive works as expected' do
       tar_obj = described_class.new(tar_name)
-      expect{ tar_obj.add_to_archive(tmp_file2) }.not_to raise_error
-      expect{ tar_obj.add_to_archive(tmp_file2, tmp_file3) }.not_to raise_error
-      expect(tar_obj.archive_info).to eq([tmp_file2, tmp_file2, tmp_file3])
+      expect{ tar_obj.add_to_archive(second_temp_file) }.not_to raise_error
+      expect{ tar_obj.add_to_archive(second_temp_file, third_temp_file) }.not_to raise_error
+      expect(tar_obj.archive_info).to eq([second_temp_file, second_temp_file, third_temp_file])
     end
 
     example 'update_archive basic functionality' do
@@ -204,9 +204,9 @@ RSpec.describe Archive::Tar::External do
 
     example 'update_archive behaves as expected' do
       tar_obj.create_archive(pattern)
-      expect(tar_obj.archive_info).to eq([tmp_file1, tmp_file2, tmp_file3])
-      tar_obj.update_archive(tmp_file2)
-      expect(tar_obj.archive_info).to eq([tmp_file1, tmp_file2, tmp_file3])
+      expect(tar_obj.archive_info).to eq([first_temp_file, second_temp_file, third_temp_file])
+      tar_obj.update_archive(second_temp_file)
+      expect(tar_obj.archive_info).to eq([first_temp_file, second_temp_file, third_temp_file])
     end
 
     example 'extract_archive_basic' do
@@ -225,7 +225,7 @@ RSpec.describe Archive::Tar::External do
 
     example 'extract_archive with a valid file argument behaves as expected' do
       tar_obj.create(pattern)
-      expect{ tar_obj.extract_archive(tmp_file2) }.not_to raise_error
+      expect{ tar_obj.extract_archive(second_temp_file) }.not_to raise_error
     end
 
     example 'expand_archive, expand and extract are aliases for extract_archive' do
