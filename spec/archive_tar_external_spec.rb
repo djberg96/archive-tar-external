@@ -8,6 +8,7 @@
 ###############################################################################
 require 'archive/tar/external'
 require 'spec_helper'
+require 'fileutils'
 
 RSpec.describe Archive::Tar::External do
   let(:tmp_file1) { 'temp1.txt' }
@@ -28,14 +29,14 @@ RSpec.describe Archive::Tar::External do
   end
 
   after do
-    File.delete(tmp_file1) if File.exist?(tmp_file1)
-    File.delete(tmp_file2) if File.exist?(tmp_file2)
-    File.delete(tmp_file3) if File.exist?(tmp_file3)
+    FileUtils.rm_f(tmp_file1)
+    FileUtils.rm_f(tmp_file2)
+    FileUtils.rm_f(tmp_file3)
 
-    File.delete(tar_name) if File.exist?(tar_name)
-    File.delete("#{tar_name}.gz") if File.exist?("#{tar_name}.gz")
-    File.delete("#{tar_name}.bz2") if File.exist?("#{tar_name}.bz2")
-    File.delete("#{tar_name}.zip") if File.exist?("#{tar_name}.zip")
+    FileUtils.rm_f(tar_name)
+    FileUtils.rm_f("#{tar_name}.gz")
+    FileUtils.rm_f("#{tar_name}.bz2")
+    FileUtils.rm_f("#{tar_name}.zip")
   end
 
   example 'version' do
@@ -52,7 +53,7 @@ RSpec.describe Archive::Tar::External do
       expect{ described_class.new(tar_name, pattern) }.not_to raise_error
     end
 
-    example 'with compression program', :gzip => true do
+    example 'with compression program', :gzip do
       expect{ described_class.new(tar_name, pattern, 'gzip') }.not_to raise_error
     end
 
@@ -101,7 +102,7 @@ RSpec.describe Archive::Tar::External do
     example 'create_archive basic functionality' do
       expect(tar_obj).to respond_to(:create_archive)
       expect{ tar_obj.create_archive(pattern) }.not_to raise_error
-      expect(File.exist?(tar_name)).to be true
+      expect(File.exist?(tar_name)).to be(true)
     end
 
     example 'create_archive requires at least on argument' do
@@ -137,18 +138,18 @@ RSpec.describe Archive::Tar::External do
       expect(tar_obj.method(:compress)).to eq(tar_obj.method(:compress_archive))
     end
 
-    example 'compress_archive defaults to gzip', :gzip => true do
+    example 'compress_archive defaults to gzip', :gzip do
       tar_obj.create_archive(pattern)
       tar_obj.compress_archive
 
       expect(tar_obj.compressed_archive_name).to eq(archive_name)
-      expect(File.exist?(archive_name)).to be true
+      expect(File.exist?(archive_name)).to be(true)
     end
 
-    example 'compress_archive works with bzip2', :bzip2 => true do
+    example 'compress_archive works with bzip2', :bzip2 do
       expect{ tar_obj.create_archive(pattern) }.not_to raise_error
       expect{ tar_obj.compress_archive('bzip2') }.not_to raise_error
-      expect(File.exist?('test.tar.bz2')).to be true
+      expect(File.exist?('test.tar.bz2')).to be(true)
     end
   end
 
