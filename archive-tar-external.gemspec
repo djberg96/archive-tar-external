@@ -20,7 +20,8 @@ Gem::Specification.new do |spec|
     'documentation_uri'     => 'https://github.com/djberg96/archive-tar-external/wiki',
     'source_code_uri'       => 'https://github.com/djberg96/archive-tar-external',
     'wiki_uri'              => 'https://github.com/djberg96/archive-tar-external/wiki',
-    'rubygems_mfa_required' => 'true'
+    'rubygems_mfa_required' => 'true',
+    'funding_uri'           => 'https://github.com/sponsors/djberg96'
   }
 
   spec.add_development_dependency('rake')
