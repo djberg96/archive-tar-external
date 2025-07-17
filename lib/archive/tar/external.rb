@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'open3'
+require 'shellwords'
 
 # The Archive module serves as a namespace only.
 module Archive
@@ -30,6 +31,26 @@ module Archive
 
       # The format of the archive file. The default is "pax".
       attr_reader :format
+
+      private
+
+      # Execute a command safely and handle errors consistently
+      def execute_command(cmd, error_class = Error)
+        stdout, stderr, status = if cmd.is_a?(Array)
+          Open3.capture3(*cmd)
+        else
+          Open3.capture3(cmd)
+        end
+
+        unless status.success?
+          error_msg = stderr.empty? ? "Command failed with exit status #{status.exitstatus}" : stderr.strip
+          raise error_class, error_msg
+        end
+
+        [stdout, stderr, status]
+      end
+
+      public
 
       # Returns an Archive::Tar::External object. The +archive_name+ is the
       # name of the tarball. While a .tar extension is recommended based on
@@ -81,13 +102,15 @@ module Archive
       # Raises an Archive::Tar::Error if a failure occurs.
       #
       def create_archive(file_pattern, options = 'cf')
-        cmd = "#{@tar_program} --format #{@format} -#{options} #{@archive_name} #{file_pattern}"
-
-        Open3.popen3(cmd) do |_tar_in, _tar_out, tar_err|
-          err = tar_err.gets
-          raise Error, err.chomp if err
+        # Validate that options only contains expected tar options
+        unless options.match?(/\A[a-zA-Z]+\z/)
+          raise Error, "Invalid options format: #{options}"
         end
 
+        # Build command with proper escaping, but allow file_pattern to be shell-expanded
+        cmd = "#{Shellwords.escape(@tar_program)} --format #{Shellwords.escape(@format)} -#{options} #{Shellwords.escape(@archive_name)} #{file_pattern}"
+
+        execute_command(cmd)
         self
       end
 
@@ -100,16 +123,27 @@ module Archive
       # Any errors that occur here will raise a Tar::CompressError.
       #
       def compress_archive(program = 'gzip')
-        cmd = "#{program} #{@archive_name}"
+        # Split program and args for safer execution
+        program_parts = Shellwords.split(program)
+        cmd = program_parts + [@archive_name]
 
-        Open3.popen3(cmd) do |_prog_in, _prog_out, prog_err|
-          err = prog_err.gets
-          raise CompressError, err.chomp if err
+        stdout, stderr, status = Open3.capture3(*cmd)
 
-          # Find the new file name with the extension.  There's probably a more
-          # reliable way to do this, but this should work 99% of the time.
-          name = Dir["#{@archive_name}.{gz,bz2,cpio,zip}"].first
-          @compressed_archive_name = name
+        unless status.success?
+          error_msg = stderr.empty? ? "Compression failed with exit status #{status.exitstatus}" : stderr.strip
+          raise CompressError, error_msg
+        end
+
+        # Find the new file name with the extension more reliably
+        # Check common compression extensions
+        extensions = %w[.gz .bz2 .xz .Z .lz .lzma]
+        compressed_name = extensions.find { |ext| File.exist?("#{@archive_name}#{ext}") }
+
+        if compressed_name
+          @compressed_archive_name = "#{@archive_name}#{compressed_name}"
+        else
+          # Fallback to original glob pattern
+          @compressed_archive_name = Dir["#{@archive_name}.{gz,bz2,xz,Z,lz,lzma,cpio,zip}"].first
         end
 
         self
@@ -130,13 +164,18 @@ module Archive
       def uncompress_archive(program = 'gunzip')
         raise CompressError, 'no compressed file found' unless @compressed_archive_name
 
-        cmd = "#{program} #{@compressed_archive_name}"
+        # Split program and args for safer execution
+        program_parts = Shellwords.split(program)
+        cmd = program_parts + [@compressed_archive_name]
 
-        Open3.popen3(cmd) do |_prog_in, _prog_out, prog_err|
-          err = prog_err.gets
-          raise CompressError, err.chomp if err
-          @compressed_archive_name = nil
+        stdout, stderr, status = Open3.capture3(*cmd)
+
+        unless status.success?
+          error_msg = stderr.empty? ? "Decompression failed with exit status #{status.exitstatus}" : stderr.strip
+          raise CompressError, error_msg
         end
+
+        @compressed_archive_name = nil
         self
       end
 
@@ -146,11 +185,15 @@ module Archive
       # The default decompression program is gunzip.
       #
       def self.uncompress_archive(archive, program = 'gunzip')
-        cmd = "#{program} #{archive}"
+        # Split program and args for safer execution
+        program_parts = Shellwords.split(program)
+        cmd = program_parts + [archive]
 
-        Open3.popen3(cmd) do |_prog_in, _prog_out, prog_err|
-          err = prog_err.gets
-          raise CompressError, err.chomp if err
+        stdout, stderr, status = Open3.capture3(*cmd)
+
+        unless status.success?
+          error_msg = stderr.empty? ? "Decompression failed with exit status #{status.exitstatus}" : stderr.strip
+          raise CompressError, error_msg
         end
       end
 
@@ -162,19 +205,9 @@ module Archive
       # This method does not extract the archive.
       #
       def archive_info
-        result = []
-        cmd = "#{@tar_program} tf #{@archive_name}"
-
-        Open3.popen3(cmd) do |_ain, aout, aerr|
-          err = aerr.gets
-          raise Error, err.chomp if err
-
-          while (output = aout.gets)
-            result << output.chomp
-          end
-        end
-
-        result
+        cmd = [@tar_program, 'tf', @archive_name]
+        stdout, = execute_command(cmd)
+        stdout.lines.map(&:chomp)
       end
 
       alias info archive_info
@@ -184,12 +217,8 @@ module Archive
       def add_to_archive(*files)
         raise Error, 'there must be at least one file specified' if files.empty?
 
-        cmd = "#{@tar_program} rf #{@archive_name} #{files.join(' ')}"
-
-        Open3.popen3(cmd) do |_ain, _aout, aerr|
-          err = aerr.gets
-          raise Error, err.chomp if err
-        end
+        cmd = [@tar_program, 'rf', @archive_name] + files
+        execute_command(cmd)
         self
       end
 
@@ -201,11 +230,13 @@ module Archive
       def update_archive(*files)
         raise Error, 'there must be at least one file specified' if files.empty?
 
-        cmd = "#{@tar_program} uf #{@archive_name} #{files.join(' ')}"
+        cmd = [@tar_program, 'uf', @archive_name] + files
 
-        Open3.popen3(cmd) do |_ain, _aout, aerr|
-          err = aerr.gets
-          raise Error, err.chomp if err
+        stdout, stderr, status = Open3.capture3(*cmd)
+
+        unless status.success?
+          error_msg = stderr.empty? ? "Failed to update files in archive" : stderr.strip
+          raise Error, error_msg
         end
 
         self
@@ -222,12 +253,13 @@ module Archive
       # file that does not exist in the archive.
       #
       def extract_archive(*files)
-        cmd = "#{@tar_program} xf #{@archive_name}"
-        cmd = "#{cmd} #{files.join(' ')}" unless files.empty?
+        cmd = [@tar_program, 'xf', @archive_name] + files
 
-        Open3.popen3(cmd) do |_ain, _aout, aerr|
-          err = aerr.gets
-          raise Error, err.chomp if err
+        stdout, stderr, status = Open3.capture3(*cmd)
+
+        unless status.success?
+          error_msg = stderr.empty? ? "Failed to extract archive" : stderr.strip
+          raise Error, error_msg
         end
 
         self
@@ -242,12 +274,13 @@ module Archive
       # argument. Also, the tar program is hard coded to 'tar xf'.
       #
       def self.extract_archive(archive, *files)
-        cmd = "tar xf #{archive}"
-        cmd = "#{cmd} #{files.join(' ')}" unless files.empty?
+        cmd = ['tar', 'xf', archive] + files
 
-        Open3.popen3(cmd) do |_ain, _aout, aerr|
-          err = aerr.gets
-          raise Error, err.chomp if err
+        stdout, stderr, status = Open3.capture3(*cmd)
+
+        unless status.success?
+          error_msg = stderr.empty? ? "Failed to extract archive" : stderr.strip
+          raise Error, error_msg
         end
 
         self
