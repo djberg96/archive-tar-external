@@ -18,7 +18,7 @@ module Archive
     # This class encapsulates tar & zip operations.
     class Tar::External
       # The version of the archive-tar-external library.
-      VERSION = '1.5.0'
+      VERSION = '1.6.0'
 
       # The name of the archive file to be used, e.g. "test.tar"
       attr_accessor :archive_name

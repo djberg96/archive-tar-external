@@ -1,3 +1,7 @@
+## 1.6.0 - 17-Jul-2025
+* Now uses shellwords and stricter argument validation for tighter security.
+  See IMPROVEMENTS.md in the doc directory for more details.
+
 ## 1.5.0 - 1-May-2021
 * A fourth option was added to the constructor. This allows you to set the
   archive format. By default this is now set to 'pax'.
