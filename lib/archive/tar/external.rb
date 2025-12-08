@@ -127,7 +127,7 @@ module Archive
         program_parts = Shellwords.split(program)
         cmd = program_parts + [@archive_name]
 
-        stdout, stderr, status = Open3.capture3(*cmd)
+        _stdout, stderr, status = Open3.capture3(*cmd)
 
         unless status.success?
           error_msg = stderr.empty? ? "Compression failed with exit status #{status.exitstatus}" : stderr.strip
@@ -168,7 +168,7 @@ module Archive
         program_parts = Shellwords.split(program)
         cmd = program_parts + [@compressed_archive_name]
 
-        stdout, stderr, status = Open3.capture3(*cmd)
+        _stdout, stderr, status = Open3.capture3(*cmd)
 
         unless status.success?
           error_msg = stderr.empty? ? "Decompression failed with exit status #{status.exitstatus}" : stderr.strip
@@ -189,7 +189,7 @@ module Archive
         program_parts = Shellwords.split(program)
         cmd = program_parts + [archive]
 
-        stdout, stderr, status = Open3.capture3(*cmd)
+        _stdout, stderr, status = Open3.capture3(*cmd)
 
         unless status.success?
           error_msg = stderr.empty? ? "Decompression failed with exit status #{status.exitstatus}" : stderr.strip
@@ -232,7 +232,7 @@ module Archive
 
         cmd = [@tar_program, 'uf', @archive_name] + files
 
-        stdout, stderr, status = Open3.capture3(*cmd)
+        _stdout, stderr, status = Open3.capture3(*cmd)
 
         unless status.success?
           error_msg = stderr.empty? ? "Failed to update files in archive" : stderr.strip
@@ -255,7 +255,7 @@ module Archive
       def extract_archive(*files)
         cmd = [@tar_program, 'xf', @archive_name] + files
 
-        stdout, stderr, status = Open3.capture3(*cmd)
+        _stdout, stderr, status = Open3.capture3(*cmd)
 
         unless status.success?
           error_msg = stderr.empty? ? "Failed to extract archive" : stderr.strip
@@ -276,7 +276,7 @@ module Archive
       def self.extract_archive(archive, *files)
         cmd = ['tar', 'xf', archive] + files
 
-        stdout, stderr, status = Open3.capture3(*cmd)
+        _stdout, stderr, status = Open3.capture3(*cmd)
 
         unless status.success?
           error_msg = stderr.empty? ? "Failed to extract archive" : stderr.strip
